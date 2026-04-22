@@ -134,34 +134,37 @@ interface QuestionCardProps {
 
 function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps) {
   const pillar = q.pillar;
+  const inputId = `sroi-${q.id}`;
+  const helpId = `sroi-${q.id}-help`;
 
   return (
     <div className="grain rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/30">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-4">
-          <span className="font-display text-3xl font-semibold text-primary/25">
+          <span className="font-display text-3xl font-semibold text-primary/40" aria-hidden="true">
             {String(index).padStart(2, "0")}
           </span>
           <div>
-            <h3 className="font-display text-xl font-semibold leading-tight text-foreground">
+            <label htmlFor={inputId} className="font-display text-xl font-semibold leading-tight text-foreground cursor-pointer">
+              <span className="sr-only">Question {index}: </span>
               {q.label}
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">{q.helper}</p>
+            </label>
+            <p id={helpId} className="mt-1 text-sm text-muted-foreground">{q.helper}</p>
           </div>
         </div>
         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider ${pillarText[pillar]}`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${pillarColor[pillar]}`} />
+          <span className={`h-1.5 w-1.5 rounded-full ${pillarColor[pillar]}`} aria-hidden="true" />
           {pillarLabels[pillar]}
         </span>
       </div>
 
       <div className="mt-5">
         {q.type === "currency" || q.type === "number" ? (
-          <NumberInput question={q} value={value} onChange={onChange} />
+          <NumberInput question={q} value={value} onChange={onChange} inputId={inputId} helpId={helpId} />
         ) : q.type === "percent" ? (
-          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v}%`} />
+          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v}%`} inputId={inputId} helpId={helpId} />
         ) : (
-          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v} / 10`} />
+          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v} / 10`} inputId={inputId} helpId={helpId} />
         )}
       </div>
     </div>
@@ -172,20 +175,26 @@ function NumberInput({
   question: q,
   value,
   onChange,
+  inputId,
+  helpId,
 }: {
   question: (typeof questions)[number];
   value: number;
   onChange: (v: number) => void;
+  inputId: string;
+  helpId: string;
 }) {
   return (
     <div className="flex items-center gap-2">
-      {q.unit && <span className="font-display text-2xl text-muted-foreground">{q.unit}</span>}
+      {q.unit && <span className="font-display text-2xl text-muted-foreground" aria-hidden="true">{q.unit}</span>}
       <input
+        id={inputId}
         type="number"
         min={q.min}
         step={q.step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
+        aria-describedby={helpId}
         className="w-full rounded-xl border border-input bg-background px-4 py-3 font-display text-2xl font-semibold text-foreground outline-none ring-primary/30 transition focus:border-primary focus:ring-2"
       />
     </div>
@@ -197,27 +206,34 @@ function SliderInput({
   value,
   onChange,
   format,
+  inputId,
+  helpId,
 }: {
   question: (typeof questions)[number];
   value: number;
   onChange: (v: number) => void;
   format: (v: number) => string;
+  inputId: string;
+  helpId: string;
 }) {
   return (
     <div>
       <div className="flex items-baseline justify-between">
-        <span className="font-display text-3xl font-semibold text-foreground">{format(value)}</span>
-        <span className="text-xs text-muted-foreground">
+        <span className="font-display text-3xl font-semibold text-foreground" aria-hidden="true">{format(value)}</span>
+        <span className="text-xs text-muted-foreground" aria-hidden="true">
           {q.min} — {q.max}
         </span>
       </div>
       <input
+        id={inputId}
         type="range"
         min={q.min}
         max={q.max}
         step={q.step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
+        aria-describedby={helpId}
+        aria-valuetext={format(value)}
         className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
       />
     </div>
