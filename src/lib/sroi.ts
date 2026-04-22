@@ -232,8 +232,8 @@ export function calculateSroi(answers: Record<string, number>): SroiResult {
   // Social Impact Score: total (out of 100) / 20 → 0-5
   const impactScore = Math.min(5, rawTotal / 20);
 
-  // SROI %: score acts as a multiplier. Score of 3.0 → 300%.
-  const sroiPercent = impactScore * 100;
+  // SROI %: linear map 0 → -50%, 5 → 100%.
+  const sroiPercent = -50 + (impactScore / 5) * 150;
 
   const capital = Math.max(answers.capital ?? 0, 1);
   const totalReturn = (sroiPercent / 100) * capital;
