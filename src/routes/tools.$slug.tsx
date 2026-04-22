@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ToolStub } from "@/components/ToolStub";
 import { SroiCalculator } from "@/components/SroiCalculator";
+import { InvestorDna } from "@/components/InvestorDna";
 import { tools } from "@/lib/tools";
 
 const stubContent: Record<string, { bullets: string[] }> = {
@@ -83,6 +84,10 @@ function ToolPage() {
 
   if (tool.slug === "sroi") {
     return <SroiCalculator />;
+  }
+
+  if (tool.slug === "investor-dna") {
+    return <InvestorDna />;
   }
 
   const content = stubContent[tool.slug];
