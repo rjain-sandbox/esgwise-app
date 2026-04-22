@@ -30,7 +30,7 @@ export function InvestorDna() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-6 pb-24 pt-12">
+      <main id="main-content" className="mx-auto max-w-3xl px-6 pb-24 pt-12">
         <div className="mb-10">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
             Tool 01 · Investor DNA
@@ -44,59 +44,73 @@ export function InvestorDna() {
           </p>
         </div>
 
-        <ol className="space-y-8">
-          {dnaQuestions.map((q, i) => (
-            <li
-              key={q.id}
-              className="rounded-2xl border border-border bg-card p-6 shadow-sm"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setShowResult(true);
+          }}
+        >
+          <ol className="space-y-8">
+            {dnaQuestions.map((q, i) => {
+              const inputId = `dna-${q.id}`;
+              const helpId = `dna-${q.id}-help`;
+              return (
+                <li
+                  key={q.id}
+                  className="rounded-2xl border border-border bg-card p-6 shadow-sm"
+                >
+                  <div className="flex items-baseline justify-between gap-4">
+                    <p id={helpId} className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")} ·{" "}
+                      {q.axis === "money" ? "Money focus" : "Values focus"}
+                    </p>
+                  </div>
+                  <label htmlFor={inputId} className="mt-2 block font-display text-lg font-medium leading-snug cursor-pointer">
+                    <span className="sr-only">Question {i + 1}: </span>
+                    {q.prompt}
+                  </label>
+
+                  <div className="mt-6">
+                    <input
+                      id={inputId}
+                      type="range"
+                      min={0}
+                      max={10}
+                      step={1}
+                      value={answers[q.id] ?? 5}
+                      onChange={(e) => setAnswer(q.id, Number(e.target.value))}
+                      className="w-full accent-primary"
+                      aria-describedby={helpId}
+                      aria-valuetext={`${answers[q.id] ?? 5} of 10. ${q.left} to ${q.right}`}
+                    />
+                    <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                      <span aria-hidden="true">{q.left}</span>
+                      <span className="font-mono text-foreground" aria-hidden="true">
+                        {answers[q.id] ?? 5}/10
+                      </span>
+                      <span aria-hidden="true">{q.right}</span>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="mt-12 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Link
+              to="/"
+              className="min-h-11 inline-flex items-center justify-center rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
             >
-              <div className="flex items-baseline justify-between gap-4">
-                <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                  {String(i + 1).padStart(2, "0")} ·{" "}
-                  {q.axis === "money" ? "Money focus" : "Values focus"}
-                </p>
-              </div>
-              <h2 className="mt-2 font-display text-lg font-medium leading-snug">
-                {q.prompt}
-              </h2>
-
-              <div className="mt-6">
-                <input
-                  type="range"
-                  min={0}
-                  max={10}
-                  step={1}
-                  value={answers[q.id] ?? 5}
-                  onChange={(e) => setAnswer(q.id, Number(e.target.value))}
-                  className="w-full accent-primary"
-                  aria-label={q.prompt}
-                />
-                <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-                  <span>{q.left}</span>
-                  <span className="font-mono text-foreground">
-                    {answers[q.id] ?? 5}/10
-                  </span>
-                  <span>{q.right}</span>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-12 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            to="/"
-            className="rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
-          >
-            Back to dashboard
-          </Link>
-          <button
-            onClick={() => setShowResult(true)}
-            className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-          >
-            Reveal my Investor DNA →
-          </button>
-        </div>
+              Back to dashboard
+            </Link>
+            <button
+              type="submit"
+              className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+            >
+              Reveal my Investor DNA →
+            </button>
+          </div>
+        </form>
       </main>
     </div>
   );
