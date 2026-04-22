@@ -257,10 +257,11 @@ function ResultsView({
   const angle = -90 + (scoreCapped / max) * 180;
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
+    <main id="main-content" className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
       <button
+        type="button"
         onClick={onBack}
-        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="min-h-11 rounded-md text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         ← Edit answers
       </button>
@@ -268,13 +269,17 @@ function ResultsView({
       <div className="mt-8 grid items-start gap-12 lg:grid-cols-12">
         {/* Gauge */}
         <div className="lg:col-span-7">
-          <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Social Impact Score</div>
-          <h1 className="mt-2 font-display text-6xl font-semibold leading-none text-foreground sm:text-7xl">
-            {result.impactScore.toFixed(2)}<span className="text-primary/40">/5</span>
+          <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Social Impact Score</p>
+          <h1 aria-live="polite" className="mt-2 font-display text-6xl font-semibold leading-none text-foreground sm:text-7xl">
+            {result.impactScore.toFixed(2)}<span className="text-primary/40" aria-hidden="true">/5</span>
+            <span className="sr-only"> out of 5</span>
           </h1>
 
-          <div className={`mt-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${tierColor[result.tier.band]}`}>
-            <span className="h-1.5 w-1.5 rounded-full bg-current" />
+          <div
+            role="status"
+            className={`mt-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${tierColor[result.tier.band]}`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true" />
             {result.tier.label}
           </div>
 
@@ -283,7 +288,13 @@ function ResultsView({
           </p>
 
           <div className="relative mt-10 aspect-[2/1] w-full max-w-md">
-            <svg viewBox="0 0 200 110" className="h-full w-full">
+            <svg
+              viewBox="0 0 200 110"
+              className="h-full w-full"
+              role="img"
+              aria-label={`Gauge showing impact score ${result.impactScore.toFixed(2)} out of 5: ${result.tier.label}`}
+            >
+              <title>{`Impact gauge: ${result.impactScore.toFixed(2)} of 5 — ${result.tier.label}`}</title>
               <defs>
                 <linearGradient id="arc" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="oklch(0.65 0.04 150)" />
@@ -304,7 +315,7 @@ function ResultsView({
                 { x: 140, y: 30, label: "4" },
                 { x: 185, y: 108, label: "5" },
               ].map((t) => (
-                <text key={t.label} x={t.x} y={t.y} textAnchor="middle" className="fill-muted-foreground" fontSize="9">
+                <text key={t.label} x={t.x} y={t.y} textAnchor="middle" className="fill-foreground" fontSize="9">
                   {t.label}
                 </text>
               ))}
