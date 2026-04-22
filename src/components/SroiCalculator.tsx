@@ -105,7 +105,7 @@ export function SroiCalculator() {
             <div className="text-sm">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">Live preview</div>
               <div className="font-display text-2xl font-semibold text-foreground">
-                {result.ratio.toFixed(2)}:1{" "}
+                {result.impactScore.toFixed(2)}<span className="text-base font-sans font-normal text-muted-foreground">/5</span>{" "}
                 <span className="text-base font-sans font-normal text-muted-foreground">
                   · {result.tier.label}
                 </span>
