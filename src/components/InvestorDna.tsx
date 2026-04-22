@@ -122,28 +122,31 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-6 pb-24 pt-12">
+      <main id="main-content" className="mx-auto max-w-4xl px-6 pb-24 pt-12">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
           Your result
         </p>
-        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 aria-live="polite" className="mt-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
           You are <span className={quadrant.accent}>{quadrant.name}</span>
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">{quadrant.tagline}</p>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
           {/* Quadrant chart */}
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          <figure className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <figcaption className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
               Your position
-            </p>
-            <div className="relative mt-6 aspect-square w-full">
+            </figcaption>
+            <div
+              className="relative mt-6 aspect-square w-full"
+              role="img"
+              aria-label={`Position chart. Money focus ${Math.round(moneyScore)} of 100, values focus ${Math.round(valuesScore)} of 100. You fall in the ${quadrant.name} quadrant.`}
+            >
               {/* Quadrant grid */}
-              <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 overflow-hidden rounded-xl border border-border">
+              <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 overflow-hidden rounded-xl border border-border" aria-hidden="true">
                 {quadrants
                   .slice()
                   .sort((a, b) => {
-                    // top-left, top-right, bottom-left, bottom-right
                     const order = (q: typeof a) =>
                       (q.highValues ? 0 : 2) + (q.highMoney ? 1 : 0);
                     return order(a) - order(b);
@@ -154,7 +157,7 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
                       className={`flex items-center justify-center p-3 text-center text-xs font-medium ${
                         q.id === quadrant.id
                           ? `${quadrant.bg} ${quadrant.accent}`
-                          : "bg-muted/30 text-muted-foreground"
+                          : "bg-muted/30 text-foreground"
                       }`}
                     >
                       {q.name}
@@ -163,32 +166,32 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
               </div>
 
               {/* Axis lines */}
-              <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border" />
-              <div className="pointer-events-none absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-border" />
+              <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border" aria-hidden="true" />
+              <div className="pointer-events-none absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-border" aria-hidden="true" />
 
               {/* Marker */}
               <div
+                aria-hidden="true"
                 className="absolute h-4 w-4 -translate-x-1/2 translate-y-1/2 rounded-full border-2 border-background bg-foreground shadow-lg"
                 style={{
                   left: `${moneyScore}%`,
                   bottom: `${valuesScore}%`,
                 }}
-                aria-label="Your position"
               />
             </div>
 
             {/* Axis labels */}
-            <div className="mt-4 flex justify-between text-xs text-muted-foreground">
+            <div className="mt-4 flex justify-between text-xs text-muted-foreground" aria-hidden="true">
               <span>← Safety</span>
               <span className="font-mono text-foreground">Money focus</span>
               <span>Growth →</span>
             </div>
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
+            <div className="mt-1 flex justify-between text-xs text-muted-foreground" aria-hidden="true">
               <span>↓ Profit only</span>
               <span className="font-mono text-foreground">Values focus</span>
               <span>Values-led ↑</span>
             </div>
-          </div>
+          </figure>
 
           {/* Description + scores */}
           <div className="space-y-6">
@@ -199,7 +202,7 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
               <h2 className={`mt-2 font-display text-2xl font-semibold ${quadrant.accent}`}>
                 {quadrant.name}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-foreground/80">
+              <p className="mt-3 text-sm leading-relaxed text-foreground/90">
                 {quadrant.description}
               </p>
             </div>
@@ -214,13 +217,14 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
         <div className="mt-12 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             to="/"
-            className="rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
+            className="min-h-11 inline-flex items-center justify-center rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
           >
             Back to dashboard
           </Link>
           <button
+            type="button"
             onClick={onReset}
-            className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+            className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
           >
             Retake the quiz
           </button>
