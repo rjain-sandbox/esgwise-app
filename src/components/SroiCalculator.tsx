@@ -378,12 +378,14 @@ function ResultsView({
 
       {/* Tier scale */}
       <div className="mt-16 rounded-3xl border border-border bg-card/60 p-6">
-        <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Scoring scale</div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+        <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Rating scale</div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-5">
           {[
-            { band: "traditional" as const, range: "1:1", label: "Traditional", desc: "Market alignment only." },
-            { band: "aware" as const, range: "2:1 – 3:1", label: "Impact-Aware", desc: "Positive social externalities." },
-            { band: "transformative" as const, range: ">4:1", label: "Transformative", desc: "High-impact social enterprise." },
+            { band: "loss" as const, range: "1.0", label: "Value Loss", desc: "Negative or zero social impact." },
+            { band: "aware" as const, range: "2.0", label: "Impact Aware", desc: "Minimal positive impact." },
+            { band: "creating" as const, range: "3.0", label: "Value Creating", desc: "Solid, positive externalities." },
+            { band: "leader" as const, range: "4.0", label: "Impact Leader", desc: "High social/environmental performance." },
+            { band: "transformative" as const, range: "5.0", label: "Transformative", desc: "Exceptional impact across all pillars." },
           ].map((t) => {
             const active = result.tier.band === t.band;
             return (
@@ -394,7 +396,7 @@ function ResultsView({
                 <div className={`inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-medium ${tierColor[t.band]}`}>
                   {t.range}
                 </div>
-                <div className="mt-3 font-display text-xl font-semibold text-foreground">{t.label}</div>
+                <div className="mt-3 font-display text-lg font-semibold text-foreground">{t.label}</div>
                 <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
               </div>
             );
