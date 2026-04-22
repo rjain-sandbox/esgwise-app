@@ -49,7 +49,7 @@ function Index() {
                 <span className="h-1.5 w-1.5 rounded-full bg-moss" aria-hidden="true" />
                 A toolkit for thoughtful capital
               </span>
-              <h1 className="mt-6 font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[1.02] text-foreground">
+              <h1 id="hero-heading" className="mt-6 font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[1.02] text-foreground">
                 Measure what
                 <br />
                 <span className="italic text-primary">actually matters.</span>
@@ -87,11 +87,11 @@ function Index() {
       </section>
 
       {/* Tools */}
-      <section id="tools" className="mx-auto max-w-6xl px-6 pb-24">
+      <section id="tools" aria-labelledby="tools-heading" className="mx-auto max-w-6xl px-6 pb-24">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
             <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">The toolkit</div>
-            <h2 className="mt-2 font-display text-4xl font-semibold text-foreground sm:text-5xl">
+            <h2 id="tools-heading" className="mt-2 font-display text-4xl font-semibold text-foreground sm:text-5xl">
               Five tools, one practice.
             </h2>
           </div>
@@ -139,11 +139,11 @@ function Index() {
       </section>
 
       {/* About */}
-      <section id="about" className="border-t border-border/60 bg-secondary/40">
+      <section id="about" aria-labelledby="about-heading" className="border-t border-border/60 bg-secondary/40">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-20 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Why ESGwise</div>
-            <h2 className="mt-3 font-display text-4xl font-semibold leading-tight text-foreground">
+            <h2 id="about-heading" className="mt-3 font-display text-4xl font-semibold leading-tight text-foreground">
               ESG without the
               <br />
               <span className="italic">jargon tax.</span>
@@ -162,6 +162,7 @@ function Index() {
           </div>
         </div>
       </section>
+      </main>
 
       <footer className="border-t border-border/60">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-3 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center">
