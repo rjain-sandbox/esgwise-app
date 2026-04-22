@@ -80,8 +80,9 @@ export function SroiCalculator() {
           <span className="italic text-primary">on Investment.</span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Answer 10 questions about your planned investment. We weigh social impact at 40%, with financial,
-          environmental and innovation each at 20% — then convert your score into an SROI ratio.
+          Answer 10 questions about your planned investment. We score each on a 0–10 scale,
+          divide the total by 20 to get a 0–5 Social Impact Score, then translate that into
+          an SROI percentage and a Total Social Return in dollars.
         </p>
 
         <form
