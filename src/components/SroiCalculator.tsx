@@ -389,14 +389,16 @@ function ResultsView({
 
           <div className="flex flex-wrap gap-3">
             <button
+              type="button"
               onClick={onBack}
-              className="rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+              className="min-h-11 rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
             >
               Refine answers
             </button>
             <button
+              type="button"
               onClick={onReset}
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+              className="min-h-11 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
               Start over
             </button>
