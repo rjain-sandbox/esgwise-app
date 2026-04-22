@@ -18,17 +18,17 @@ const pillarColor: Record<keyof typeof pillarWeights, string> = {
 };
 
 const pillarText: Record<keyof typeof pillarWeights, string> = {
-  social: "text-clay",
+  social: "text-clay-text",
   financial: "text-primary",
-  environmental: "text-moss",
-  innovation: "text-ochre",
+  environmental: "text-moss-text",
+  innovation: "text-ochre-text",
 };
 
 const tierColor: Record<SroiResult["tier"]["band"], string> = {
-  loss: "bg-muted text-muted-foreground",
+  loss: "bg-muted text-foreground",
   aware: "bg-muted text-foreground",
-  creating: "bg-ochre/20 text-ochre",
-  leader: "bg-moss/20 text-moss",
+  creating: "bg-ochre/25 text-ochre-text",
+  leader: "bg-moss/25 text-moss-text",
   transformative: "bg-primary/15 text-primary",
 };
 
@@ -65,14 +65,14 @@ export function SroiCalculator() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-6 py-12 sm:py-16">
+      <main id="main-content" className="mx-auto max-w-4xl px-6 py-12 sm:py-16">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Back to dashboard
         </Link>
 
         <div className="mt-8 flex items-center gap-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-ochre" />
-          <span className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Tool 03 · SROI Calculator</span>
+          <span className="h-2.5 w-2.5 rounded-full bg-ochre" aria-hidden="true" />
+          <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Tool 03 · SROI Calculator</p>
         </div>
         <h1 className="mt-4 font-display text-5xl font-semibold leading-[1.05] text-foreground sm:text-6xl">
           Social Return
@@ -103,7 +103,7 @@ export function SroiCalculator() {
           ))}
 
           <div className="sticky bottom-4 z-10 mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card/95 p-4 backdrop-blur-md shadow-[0_20px_60px_-20px_color-mix(in_oklab,var(--primary)_25%,transparent)]">
-            <div className="text-sm">
+            <div className="text-sm" aria-live="polite" aria-atomic="true">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">Live preview</div>
               <div className="font-display text-2xl font-semibold text-foreground">
                 {result.impactScore.toFixed(2)}<span className="text-base font-sans font-normal text-muted-foreground">/5</span>{" "}
@@ -114,7 +114,7 @@ export function SroiCalculator() {
             </div>
             <button
               type="submit"
-              className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+              className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
               Calculate SROI →
             </button>
