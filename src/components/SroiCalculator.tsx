@@ -25,9 +25,11 @@ const pillarText: Record<keyof typeof pillarWeights, string> = {
 };
 
 const tierColor: Record<SroiResult["tier"]["band"], string> = {
-  traditional: "bg-muted text-foreground",
-  aware: "bg-ochre/20 text-ochre",
-  transformative: "bg-moss/20 text-moss",
+  loss: "bg-muted text-muted-foreground",
+  aware: "bg-muted text-foreground",
+  creating: "bg-ochre/20 text-ochre",
+  leader: "bg-moss/20 text-moss",
+  transformative: "bg-primary/15 text-primary",
 };
 
 function defaults(): Record<string, number> {
@@ -78,8 +80,9 @@ export function SroiCalculator() {
           <span className="italic text-primary">on Investment.</span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Answer 10 questions about your planned investment. We weigh social impact at 40%, with financial,
-          environmental and innovation each at 20% — then convert your score into an SROI ratio.
+          Answer 10 questions about your planned investment. We score each on a 0–10 scale,
+          divide the total by 20 to get a 0–5 Social Impact Score, then translate that into
+          an SROI percentage and a Total Social Return in dollars.
         </p>
 
         <form
@@ -103,7 +106,7 @@ export function SroiCalculator() {
             <div className="text-sm">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">Live preview</div>
               <div className="font-display text-2xl font-semibold text-foreground">
-                {result.ratio.toFixed(2)}:1{" "}
+                {result.impactScore.toFixed(2)}<span className="text-base font-sans font-normal text-muted-foreground">/5</span>{" "}
                 <span className="text-base font-sans font-normal text-muted-foreground">
                   · {result.tier.label}
                 </span>
@@ -232,10 +235,10 @@ function ResultsView({
   onBack: () => void;
   onReset: () => void;
 }) {
-  // Gauge maps 0 → 6:1+ across a 180° arc. We display 0..6 with the needle.
-  const max = 6;
-  const ratioCapped = Math.min(result.ratio, max);
-  const angle = -90 + (ratioCapped / max) * 180;
+  // Gauge maps the 0–5 social impact score across a 180° arc.
+  const max = 5;
+  const scoreCapped = Math.min(result.impactScore, max);
+  const angle = -90 + (scoreCapped / max) * 180;
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
@@ -249,9 +252,9 @@ function ResultsView({
       <div className="mt-8 grid items-start gap-12 lg:grid-cols-12">
         {/* Gauge */}
         <div className="lg:col-span-7">
-          <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Your result</div>
+          <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Social Impact Score</div>
           <h1 className="mt-2 font-display text-6xl font-semibold leading-none text-foreground sm:text-7xl">
-            {result.ratio.toFixed(2)}<span className="text-primary/40">:1</span>
+            {result.impactScore.toFixed(2)}<span className="text-primary/40">/5</span>
           </h1>
 
           <div className={`mt-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${tierColor[result.tier.band]}`}>
@@ -265,7 +268,6 @@ function ResultsView({
 
           <div className="relative mt-10 aspect-[2/1] w-full max-w-md">
             <svg viewBox="0 0 200 110" className="h-full w-full">
-              {/* arc segments */}
               <defs>
                 <linearGradient id="arc" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="oklch(0.65 0.04 150)" />
@@ -280,18 +282,16 @@ function ResultsView({
                 strokeWidth="14"
                 strokeLinecap="round"
               />
-              {/* tick labels */}
               {[
                 { x: 15, y: 108, label: "0" },
                 { x: 60, y: 30, label: "2" },
                 { x: 140, y: 30, label: "4" },
-                { x: 185, y: 108, label: "6+" },
+                { x: 185, y: 108, label: "5" },
               ].map((t) => (
                 <text key={t.label} x={t.x} y={t.y} textAnchor="middle" className="fill-muted-foreground" fontSize="9">
                   {t.label}
                 </text>
               ))}
-              {/* needle */}
               <g transform={`translate(100 100) rotate(${angle})`}>
                 <line x1="0" y1="0" x2="0" y2="-78" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-foreground" />
                 <circle r="6" className="fill-primary" />
@@ -302,11 +302,23 @@ function ResultsView({
 
         {/* Breakdown */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="rounded-2xl border border-border bg-card p-6">
-            <div className="text-xs uppercase tracking-wider text-muted-foreground">Weighted impact score</div>
-            <div className="mt-1 font-display text-4xl font-semibold text-foreground">
-              {result.weightedScore.toFixed(1)}
-              <span className="text-xl text-muted-foreground"> / 100</span>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground">SROI</div>
+              <div className="mt-1 font-display text-3xl font-semibold text-foreground">
+                {Math.round(result.sroiPercent)}%
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground">
+                ${(result.sroiPercent / 100).toFixed(2)} per $1 invested
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground">Raw total</div>
+              <div className="mt-1 font-display text-3xl font-semibold text-foreground">
+                {result.rawTotal.toFixed(0)}
+                <span className="text-base text-muted-foreground"> /100</span>
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground">÷ 20 → impact score</div>
             </div>
           </div>
 
@@ -321,7 +333,7 @@ function ResultsView({
                     <div className="flex items-baseline justify-between text-sm">
                       <span className={`font-medium ${pillarText[p]}`}>{pillarLabels[p]}</span>
                       <span className="text-muted-foreground">
-                        {score.toFixed(1)}/10 · {Math.round(pillarWeights[p] * 100)}% weight
+                        {score.toFixed(1)}/10
                       </span>
                     </div>
                     <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-secondary">
@@ -335,15 +347,15 @@ function ResultsView({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-border bg-card p-5">
-              <div className="text-xs uppercase tracking-wider text-muted-foreground">Capital</div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground">Capital invested</div>
               <div className="mt-1 font-display text-2xl font-semibold text-foreground">
                 {formatCurrency(result.capital)}
               </div>
             </div>
             <div className="rounded-2xl border border-border bg-card p-5">
-              <div className="text-xs uppercase tracking-wider text-muted-foreground">Social value</div>
+              <div className="text-xs uppercase tracking-wider text-muted-foreground">Total social return</div>
               <div className="mt-1 font-display text-2xl font-semibold text-primary">
-                {formatCurrency(result.socialValue)}
+                {formatCurrency(result.totalReturn)}
               </div>
             </div>
           </div>
@@ -367,12 +379,14 @@ function ResultsView({
 
       {/* Tier scale */}
       <div className="mt-16 rounded-3xl border border-border bg-card/60 p-6">
-        <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Scoring scale</div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+        <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Rating scale</div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-5">
           {[
-            { band: "traditional" as const, range: "1:1", label: "Traditional", desc: "Market alignment only." },
-            { band: "aware" as const, range: "2:1 – 3:1", label: "Impact-Aware", desc: "Positive social externalities." },
-            { band: "transformative" as const, range: ">4:1", label: "Transformative", desc: "High-impact social enterprise." },
+            { band: "loss" as const, range: "1.0", label: "Value Loss", desc: "Negative or zero social impact." },
+            { band: "aware" as const, range: "2.0", label: "Impact Aware", desc: "Minimal positive impact." },
+            { band: "creating" as const, range: "3.0", label: "Value Creating", desc: "Solid, positive externalities." },
+            { band: "leader" as const, range: "4.0", label: "Impact Leader", desc: "High social/environmental performance." },
+            { band: "transformative" as const, range: "5.0", label: "Transformative", desc: "Exceptional impact across all pillars." },
           ].map((t) => {
             const active = result.tier.band === t.band;
             return (
@@ -383,7 +397,7 @@ function ResultsView({
                 <div className={`inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-medium ${tierColor[t.band]}`}>
                   {t.range}
                 </div>
-                <div className="mt-3 font-display text-xl font-semibold text-foreground">{t.label}</div>
+                <div className="mt-3 font-display text-lg font-semibold text-foreground">{t.label}</div>
                 <p className="mt-1 text-sm text-muted-foreground">{t.desc}</p>
               </div>
             );

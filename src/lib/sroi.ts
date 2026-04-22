@@ -152,21 +152,57 @@ export const pillarLabels: Record<keyof typeof pillarWeights, string> = {
   innovation: "Innovation & Transparency",
 };
 
-// Social Value Multiplier — scales the weighted score into a USD social-value figure.
-// Base multiplier = $50,000 per impact point; tuned so a strong score on a moderate
-// investment lands in the 2-4× range.
-export const SOCIAL_VALUE_MULTIPLIER = 50_000;
+export type ImpactBand =
+  | "transformative"
+  | "leader"
+  | "creating"
+  | "aware"
+  | "loss";
 
 export interface SroiResult {
   pillarScores: Record<keyof typeof pillarWeights, number>; // 0-10 each
-  weightedScore: number; // 0-100
+  rawTotal: number; // 0-100, sum of question scores
+  impactScore: number; // 0-5
+  sroiPercent: number; // e.g. 300 means 300%
   capital: number;
-  socialValue: number;
-  ratio: number;
+  totalReturn: number; // SROI% × capital
   tier: {
     label: string;
     description: string;
-    band: "traditional" | "aware" | "transformative";
+    band: ImpactBand;
+  };
+}
+
+// Map a 0-5 impact score to a tier.
+function tierFor(score: number): SroiResult["tier"] {
+  if (score >= 4.5)
+    return {
+      label: "Transformative",
+      description: "Exceptional impact across all pillars.",
+      band: "transformative",
+    };
+  if (score >= 3.5)
+    return {
+      label: "Impact Leader",
+      description: "High social and environmental performance.",
+      band: "leader",
+    };
+  if (score >= 2.5)
+    return {
+      label: "Value Creating",
+      description: "Solid, positive externalities.",
+      band: "creating",
+    };
+  if (score >= 1.5)
+    return {
+      label: "Impact Aware",
+      description: "Minimal positive impact.",
+      band: "aware",
+    };
+  return {
+    label: "Value Loss",
+    description: "Negative or zero social impact.",
+    band: "loss",
   };
 }
 
@@ -178,9 +214,12 @@ export function calculateSroi(answers: Record<string, number>): SroiResult {
     innovation: [],
   };
 
+  let rawTotal = 0;
   for (const q of questions) {
     const raw = answers[q.id] ?? 0;
-    byPillar[q.pillar].push(q.score(raw));
+    const s = q.score(raw); // 0-10
+    byPillar[q.pillar].push(s);
+    rawTotal += s;
   }
 
   const pillarScores = {
@@ -190,40 +229,24 @@ export function calculateSroi(answers: Record<string, number>): SroiResult {
     innovation: avg(byPillar.innovation),
   };
 
-  // Weighted score out of 100
-  const weightedScore =
-    (pillarScores.social * pillarWeights.social +
-      pillarScores.financial * pillarWeights.financial +
-      pillarScores.environmental * pillarWeights.environmental +
-      pillarScores.innovation * pillarWeights.innovation) *
-    10;
+  // Social Impact Score: total (out of 100) / 20 → 0-5
+  const impactScore = Math.min(5, rawTotal / 20);
+
+  // SROI %: score acts as a multiplier. Score of 3.0 → 300%.
+  const sroiPercent = impactScore * 100;
 
   const capital = Math.max(answers.capital ?? 0, 1);
-  const socialValue = weightedScore * SOCIAL_VALUE_MULTIPLIER;
-  const ratio = socialValue / capital;
+  const totalReturn = (sroiPercent / 100) * capital;
 
-  let tier: SroiResult["tier"];
-  if (ratio >= 4) {
-    tier = {
-      label: "Transformative",
-      description: "High-impact social enterprise. The investment generates outsized social value.",
-      band: "transformative",
-    };
-  } else if (ratio >= 2) {
-    tier = {
-      label: "Impact-Aware",
-      description: "Positive social externalities meaningfully exceed the financial outlay.",
-      band: "aware",
-    };
-  } else {
-    tier = {
-      label: "Traditional",
-      description: "Market-aligned investment with limited measurable social return.",
-      band: "traditional",
-    };
-  }
-
-  return { pillarScores, weightedScore, capital, socialValue, ratio, tier };
+  return {
+    pillarScores,
+    rawTotal,
+    impactScore,
+    sroiPercent,
+    capital,
+    totalReturn,
+    tier: tierFor(impactScore),
+  };
 }
 
 function avg(arr: number[]): number {
