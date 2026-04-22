@@ -20,30 +20,35 @@ export function ToolStub({ eyebrow, title, description, bullets, accent }: ToolS
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
+      <main id="main-content" className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Back to dashboard
         </Link>
         <div className="mt-8 flex items-center gap-3">
-          <span className={`h-2.5 w-2.5 rounded-full ${accentMap[accent]}`} />
-          <span className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{eyebrow}</span>
+          <span className={`h-2.5 w-2.5 rounded-full ${accentMap[accent]}`} aria-hidden="true" />
+          <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{eyebrow}</p>
         </div>
         <h1 className="mt-4 font-display text-5xl font-semibold leading-[1.05] text-foreground sm:text-6xl">
           {title}
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">{description}</p>
 
-        <div className="mt-12 grid gap-px overflow-hidden rounded-2xl bg-border sm:grid-cols-2">
+        <ul className="mt-12 grid gap-px overflow-hidden rounded-2xl bg-border sm:grid-cols-2">
           {bullets.map((b, i) => (
-            <div key={i} className="bg-card p-6">
-              <div className="font-display text-3xl text-primary/30">{String(i + 1).padStart(2, "0")}</div>
+            <li key={i} className="bg-card p-6">
+              <div className="font-display text-3xl text-primary/40" aria-hidden="true">{String(i + 1).padStart(2, "0")}</div>
               <p className="mt-2 text-sm leading-relaxed text-foreground">{b}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
 
         <div className="mt-12 flex flex-wrap items-center gap-4">
-          <button className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5">
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground opacity-70 cursor-not-allowed"
+          >
             Coming soon
           </button>
           <span className="text-sm text-muted-foreground">This tool is in active development.</span>
