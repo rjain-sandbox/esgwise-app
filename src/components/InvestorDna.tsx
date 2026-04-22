@@ -30,7 +30,7 @@ export function InvestorDna() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-6 pb-24 pt-12">
+      <main id="main-content" className="mx-auto max-w-3xl px-6 pb-24 pt-12">
         <div className="mb-10">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
             Tool 01 · Investor DNA
@@ -44,59 +44,73 @@ export function InvestorDna() {
           </p>
         </div>
 
-        <ol className="space-y-8">
-          {dnaQuestions.map((q, i) => (
-            <li
-              key={q.id}
-              className="rounded-2xl border border-border bg-card p-6 shadow-sm"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setShowResult(true);
+          }}
+        >
+          <ol className="space-y-8">
+            {dnaQuestions.map((q, i) => {
+              const inputId = `dna-${q.id}`;
+              const helpId = `dna-${q.id}-help`;
+              return (
+                <li
+                  key={q.id}
+                  className="rounded-2xl border border-border bg-card p-6 shadow-sm"
+                >
+                  <div className="flex items-baseline justify-between gap-4">
+                    <p id={helpId} className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")} ·{" "}
+                      {q.axis === "money" ? "Money focus" : "Values focus"}
+                    </p>
+                  </div>
+                  <label htmlFor={inputId} className="mt-2 block font-display text-lg font-medium leading-snug cursor-pointer">
+                    <span className="sr-only">Question {i + 1}: </span>
+                    {q.prompt}
+                  </label>
+
+                  <div className="mt-6">
+                    <input
+                      id={inputId}
+                      type="range"
+                      min={0}
+                      max={10}
+                      step={1}
+                      value={answers[q.id] ?? 5}
+                      onChange={(e) => setAnswer(q.id, Number(e.target.value))}
+                      className="w-full accent-primary"
+                      aria-describedby={helpId}
+                      aria-valuetext={`${answers[q.id] ?? 5} of 10. ${q.left} to ${q.right}`}
+                    />
+                    <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                      <span aria-hidden="true">{q.left}</span>
+                      <span className="font-mono text-foreground" aria-hidden="true">
+                        {answers[q.id] ?? 5}/10
+                      </span>
+                      <span aria-hidden="true">{q.right}</span>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="mt-12 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Link
+              to="/"
+              className="min-h-11 inline-flex items-center justify-center rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
             >
-              <div className="flex items-baseline justify-between gap-4">
-                <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                  {String(i + 1).padStart(2, "0")} ·{" "}
-                  {q.axis === "money" ? "Money focus" : "Values focus"}
-                </p>
-              </div>
-              <h2 className="mt-2 font-display text-lg font-medium leading-snug">
-                {q.prompt}
-              </h2>
-
-              <div className="mt-6">
-                <input
-                  type="range"
-                  min={0}
-                  max={10}
-                  step={1}
-                  value={answers[q.id] ?? 5}
-                  onChange={(e) => setAnswer(q.id, Number(e.target.value))}
-                  className="w-full accent-primary"
-                  aria-label={q.prompt}
-                />
-                <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-                  <span>{q.left}</span>
-                  <span className="font-mono text-foreground">
-                    {answers[q.id] ?? 5}/10
-                  </span>
-                  <span>{q.right}</span>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-12 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            to="/"
-            className="rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
-          >
-            Back to dashboard
-          </Link>
-          <button
-            onClick={() => setShowResult(true)}
-            className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-          >
-            Reveal my Investor DNA →
-          </button>
-        </div>
+              Back to dashboard
+            </Link>
+            <button
+              type="submit"
+              className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+            >
+              Reveal my Investor DNA →
+            </button>
+          </div>
+        </form>
       </main>
     </div>
   );
@@ -108,28 +122,31 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-6 pb-24 pt-12">
+      <main id="main-content" className="mx-auto max-w-4xl px-6 pb-24 pt-12">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
           Your result
         </p>
-        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 aria-live="polite" className="mt-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
           You are <span className={quadrant.accent}>{quadrant.name}</span>
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">{quadrant.tagline}</p>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
           {/* Quadrant chart */}
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          <figure className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <figcaption className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
               Your position
-            </p>
-            <div className="relative mt-6 aspect-square w-full">
+            </figcaption>
+            <div
+              className="relative mt-6 aspect-square w-full"
+              role="img"
+              aria-label={`Position chart. Money focus ${Math.round(moneyScore)} of 100, values focus ${Math.round(valuesScore)} of 100. You fall in the ${quadrant.name} quadrant.`}
+            >
               {/* Quadrant grid */}
-              <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 overflow-hidden rounded-xl border border-border">
+              <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 overflow-hidden rounded-xl border border-border" aria-hidden="true">
                 {quadrants
                   .slice()
                   .sort((a, b) => {
-                    // top-left, top-right, bottom-left, bottom-right
                     const order = (q: typeof a) =>
                       (q.highValues ? 0 : 2) + (q.highMoney ? 1 : 0);
                     return order(a) - order(b);
@@ -140,7 +157,7 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
                       className={`flex items-center justify-center p-3 text-center text-xs font-medium ${
                         q.id === quadrant.id
                           ? `${quadrant.bg} ${quadrant.accent}`
-                          : "bg-muted/30 text-muted-foreground"
+                          : "bg-muted/30 text-foreground"
                       }`}
                     >
                       {q.name}
@@ -149,32 +166,32 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
               </div>
 
               {/* Axis lines */}
-              <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border" />
-              <div className="pointer-events-none absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-border" />
+              <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border" aria-hidden="true" />
+              <div className="pointer-events-none absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-border" aria-hidden="true" />
 
               {/* Marker */}
               <div
+                aria-hidden="true"
                 className="absolute h-4 w-4 -translate-x-1/2 translate-y-1/2 rounded-full border-2 border-background bg-foreground shadow-lg"
                 style={{
                   left: `${moneyScore}%`,
                   bottom: `${valuesScore}%`,
                 }}
-                aria-label="Your position"
               />
             </div>
 
             {/* Axis labels */}
-            <div className="mt-4 flex justify-between text-xs text-muted-foreground">
+            <div className="mt-4 flex justify-between text-xs text-muted-foreground" aria-hidden="true">
               <span>← Safety</span>
               <span className="font-mono text-foreground">Money focus</span>
               <span>Growth →</span>
             </div>
-            <div className="mt-1 flex justify-between text-xs text-muted-foreground">
+            <div className="mt-1 flex justify-between text-xs text-muted-foreground" aria-hidden="true">
               <span>↓ Profit only</span>
               <span className="font-mono text-foreground">Values focus</span>
               <span>Values-led ↑</span>
             </div>
-          </div>
+          </figure>
 
           {/* Description + scores */}
           <div className="space-y-6">
@@ -185,7 +202,7 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
               <h2 className={`mt-2 font-display text-2xl font-semibold ${quadrant.accent}`}>
                 {quadrant.name}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-foreground/80">
+              <p className="mt-3 text-sm leading-relaxed text-foreground/90">
                 {quadrant.description}
               </p>
             </div>
@@ -200,13 +217,14 @@ function ResultView({ result, onReset }: { result: DnaResult; onReset: () => voi
         <div className="mt-12 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             to="/"
-            className="rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
+            className="min-h-11 inline-flex items-center justify-center rounded-full border border-border px-5 py-2.5 text-center text-sm text-muted-foreground transition hover:bg-muted"
           >
             Back to dashboard
           </Link>
           <button
+            type="button"
             onClick={onReset}
-            className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+            className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
           >
             Retake the quiz
           </button>

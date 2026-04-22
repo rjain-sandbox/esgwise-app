@@ -18,17 +18,17 @@ const pillarColor: Record<keyof typeof pillarWeights, string> = {
 };
 
 const pillarText: Record<keyof typeof pillarWeights, string> = {
-  social: "text-clay",
+  social: "text-clay-text",
   financial: "text-primary",
-  environmental: "text-moss",
-  innovation: "text-ochre",
+  environmental: "text-moss-text",
+  innovation: "text-ochre-text",
 };
 
 const tierColor: Record<SroiResult["tier"]["band"], string> = {
-  loss: "bg-muted text-muted-foreground",
+  loss: "bg-muted text-foreground",
   aware: "bg-muted text-foreground",
-  creating: "bg-ochre/20 text-ochre",
-  leader: "bg-moss/20 text-moss",
+  creating: "bg-ochre/25 text-ochre-text",
+  leader: "bg-moss/25 text-moss-text",
   transformative: "bg-primary/15 text-primary",
 };
 
@@ -65,14 +65,14 @@ export function SroiCalculator() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-6 py-12 sm:py-16">
+      <main id="main-content" className="mx-auto max-w-4xl px-6 py-12 sm:py-16">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Back to dashboard
         </Link>
 
         <div className="mt-8 flex items-center gap-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-ochre" />
-          <span className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Tool 03 · SROI Calculator</span>
+          <span className="h-2.5 w-2.5 rounded-full bg-ochre" aria-hidden="true" />
+          <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Tool 03 · SROI Calculator</p>
         </div>
         <h1 className="mt-4 font-display text-5xl font-semibold leading-[1.05] text-foreground sm:text-6xl">
           Social Return
@@ -103,7 +103,7 @@ export function SroiCalculator() {
           ))}
 
           <div className="sticky bottom-4 z-10 mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card/95 p-4 backdrop-blur-md shadow-[0_20px_60px_-20px_color-mix(in_oklab,var(--primary)_25%,transparent)]">
-            <div className="text-sm">
+            <div className="text-sm" aria-live="polite" aria-atomic="true">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">Live preview</div>
               <div className="font-display text-2xl font-semibold text-foreground">
                 {result.impactScore.toFixed(2)}<span className="text-base font-sans font-normal text-muted-foreground">/5</span>{" "}
@@ -114,7 +114,7 @@ export function SroiCalculator() {
             </div>
             <button
               type="submit"
-              className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+              className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
               Calculate SROI →
             </button>
@@ -134,34 +134,37 @@ interface QuestionCardProps {
 
 function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps) {
   const pillar = q.pillar;
+  const inputId = `sroi-${q.id}`;
+  const helpId = `sroi-${q.id}-help`;
 
   return (
     <div className="grain rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/30">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-4">
-          <span className="font-display text-3xl font-semibold text-primary/25">
+          <span className="font-display text-3xl font-semibold text-primary/40" aria-hidden="true">
             {String(index).padStart(2, "0")}
           </span>
           <div>
-            <h3 className="font-display text-xl font-semibold leading-tight text-foreground">
+            <label htmlFor={inputId} className="font-display text-xl font-semibold leading-tight text-foreground cursor-pointer">
+              <span className="sr-only">Question {index}: </span>
               {q.label}
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">{q.helper}</p>
+            </label>
+            <p id={helpId} className="mt-1 text-sm text-muted-foreground">{q.helper}</p>
           </div>
         </div>
         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider ${pillarText[pillar]}`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${pillarColor[pillar]}`} />
+          <span className={`h-1.5 w-1.5 rounded-full ${pillarColor[pillar]}`} aria-hidden="true" />
           {pillarLabels[pillar]}
         </span>
       </div>
 
       <div className="mt-5">
         {q.type === "currency" || q.type === "number" ? (
-          <NumberInput question={q} value={value} onChange={onChange} />
+          <NumberInput question={q} value={value} onChange={onChange} inputId={inputId} helpId={helpId} />
         ) : q.type === "percent" ? (
-          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v}%`} />
+          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v}%`} inputId={inputId} helpId={helpId} />
         ) : (
-          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v} / 10`} />
+          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v} / 10`} inputId={inputId} helpId={helpId} />
         )}
       </div>
     </div>
@@ -172,20 +175,26 @@ function NumberInput({
   question: q,
   value,
   onChange,
+  inputId,
+  helpId,
 }: {
   question: (typeof questions)[number];
   value: number;
   onChange: (v: number) => void;
+  inputId: string;
+  helpId: string;
 }) {
   return (
     <div className="flex items-center gap-2">
-      {q.unit && <span className="font-display text-2xl text-muted-foreground">{q.unit}</span>}
+      {q.unit && <span className="font-display text-2xl text-muted-foreground" aria-hidden="true">{q.unit}</span>}
       <input
+        id={inputId}
         type="number"
         min={q.min}
         step={q.step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
+        aria-describedby={helpId}
         className="w-full rounded-xl border border-input bg-background px-4 py-3 font-display text-2xl font-semibold text-foreground outline-none ring-primary/30 transition focus:border-primary focus:ring-2"
       />
     </div>
@@ -197,27 +206,34 @@ function SliderInput({
   value,
   onChange,
   format,
+  inputId,
+  helpId,
 }: {
   question: (typeof questions)[number];
   value: number;
   onChange: (v: number) => void;
   format: (v: number) => string;
+  inputId: string;
+  helpId: string;
 }) {
   return (
     <div>
       <div className="flex items-baseline justify-between">
-        <span className="font-display text-3xl font-semibold text-foreground">{format(value)}</span>
-        <span className="text-xs text-muted-foreground">
+        <span className="font-display text-3xl font-semibold text-foreground" aria-hidden="true">{format(value)}</span>
+        <span className="text-xs text-muted-foreground" aria-hidden="true">
           {q.min} — {q.max}
         </span>
       </div>
       <input
+        id={inputId}
         type="range"
         min={q.min}
         max={q.max}
         step={q.step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
+        aria-describedby={helpId}
+        aria-valuetext={format(value)}
         className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
       />
     </div>
@@ -241,10 +257,11 @@ function ResultsView({
   const angle = -90 + (scoreCapped / max) * 180;
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
+    <main id="main-content" className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
       <button
+        type="button"
         onClick={onBack}
-        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="min-h-11 rounded-md text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         ← Edit answers
       </button>
@@ -252,13 +269,17 @@ function ResultsView({
       <div className="mt-8 grid items-start gap-12 lg:grid-cols-12">
         {/* Gauge */}
         <div className="lg:col-span-7">
-          <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Social Impact Score</div>
-          <h1 className="mt-2 font-display text-6xl font-semibold leading-none text-foreground sm:text-7xl">
-            {result.impactScore.toFixed(2)}<span className="text-primary/40">/5</span>
+          <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Social Impact Score</p>
+          <h1 aria-live="polite" className="mt-2 font-display text-6xl font-semibold leading-none text-foreground sm:text-7xl">
+            {result.impactScore.toFixed(2)}<span className="text-primary/40" aria-hidden="true">/5</span>
+            <span className="sr-only"> out of 5</span>
           </h1>
 
-          <div className={`mt-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${tierColor[result.tier.band]}`}>
-            <span className="h-1.5 w-1.5 rounded-full bg-current" />
+          <div
+            role="status"
+            className={`mt-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${tierColor[result.tier.band]}`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true" />
             {result.tier.label}
           </div>
 
@@ -267,7 +288,13 @@ function ResultsView({
           </p>
 
           <div className="relative mt-10 aspect-[2/1] w-full max-w-md">
-            <svg viewBox="0 0 200 110" className="h-full w-full">
+            <svg
+              viewBox="0 0 200 110"
+              className="h-full w-full"
+              role="img"
+              aria-label={`Gauge showing impact score ${result.impactScore.toFixed(2)} out of 5: ${result.tier.label}`}
+            >
+              <title>{`Impact gauge: ${result.impactScore.toFixed(2)} of 5 — ${result.tier.label}`}</title>
               <defs>
                 <linearGradient id="arc" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="oklch(0.65 0.04 150)" />
@@ -288,7 +315,7 @@ function ResultsView({
                 { x: 140, y: 30, label: "4" },
                 { x: 185, y: 108, label: "5" },
               ].map((t) => (
-                <text key={t.label} x={t.x} y={t.y} textAnchor="middle" className="fill-muted-foreground" fontSize="9">
+                <text key={t.label} x={t.x} y={t.y} textAnchor="middle" className="fill-foreground" fontSize="9">
                   {t.label}
                 </text>
               ))}
@@ -362,14 +389,16 @@ function ResultsView({
 
           <div className="flex flex-wrap gap-3">
             <button
+              type="button"
               onClick={onBack}
-              className="rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+              className="min-h-11 rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
             >
               Refine answers
             </button>
             <button
+              type="button"
               onClick={onReset}
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+              className="min-h-11 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
               Start over
             </button>
