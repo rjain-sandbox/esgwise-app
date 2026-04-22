@@ -120,8 +120,8 @@ export const quadrants: Quadrant[] = [
       "You're comfortable with risk and play the long game. Performance is what matters most — values are a nice-to-have, not a filter.",
     highMoney: true,
     highValues: false,
-    accent: "text-ochre",
-    bg: "bg-ochre/10",
+    accent: "text-ochre-text",
+    bg: "bg-ochre/15",
   },
   {
     id: "steward",
@@ -131,8 +131,8 @@ export const quadrants: Quadrant[] = [
       "You want your money safe AND aligned with your values. You'd rather earn less than fund harm — sustainability is non-negotiable.",
     highMoney: false,
     highValues: true,
-    accent: "text-moss",
-    bg: "bg-moss/10",
+    accent: "text-moss-text",
+    bg: "bg-moss/15",
   },
   {
     id: "catalyst",
@@ -142,8 +142,8 @@ export const quadrants: Quadrant[] = [
       "You chase outsized returns AND outsized impact. You believe the best companies of tomorrow are the ones solving real-world problems today.",
     highMoney: true,
     highValues: true,
-    accent: "text-clay",
-    bg: "bg-clay/10",
+    accent: "text-clay-text",
+    bg: "bg-clay/15",
   },
 ];
 
