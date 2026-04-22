@@ -25,9 +25,11 @@ const pillarText: Record<keyof typeof pillarWeights, string> = {
 };
 
 const tierColor: Record<SroiResult["tier"]["band"], string> = {
-  traditional: "bg-muted text-foreground",
-  aware: "bg-ochre/20 text-ochre",
-  transformative: "bg-moss/20 text-moss",
+  loss: "bg-muted text-muted-foreground",
+  aware: "bg-muted text-foreground",
+  creating: "bg-ochre/20 text-ochre",
+  leader: "bg-moss/20 text-moss",
+  transformative: "bg-primary/15 text-primary",
 };
 
 function defaults(): Record<string, number> {
