@@ -53,12 +53,12 @@ export const Route = createFileRoute("/tools/$slug")({
   },
   head: ({ loaderData }) => {
     const tool = loaderData?.tool;
-    if (!tool) return { meta: [{ title: "Tool not found — Verdant" }] };
+    if (!tool) return { meta: [{ title: "Tool not found — ESGwise" }] };
     return {
       meta: [
-        { title: `${tool.name} — Verdant ESG Toolkit` },
+        { title: `${tool.name} — ESGwise ESG Toolkit` },
         { name: "description", content: tool.description },
-        { property: "og:title", content: `${tool.name} — Verdant` },
+        { property: "og:title", content: `${tool.name} — ESGwise` },
         { property: "og:description", content: tool.description },
       ],
     };

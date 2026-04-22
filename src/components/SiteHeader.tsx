@@ -12,7 +12,7 @@ export function SiteHeader() {
             </svg>
           </span>
           <div className="leading-tight">
-            <div className="font-display text-lg font-semibold text-foreground">Verdant</div>
+            <div className="font-display text-lg font-semibold text-foreground">ESGwise</div>
             <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">ESG Toolkit</div>
           </div>
         </Link>

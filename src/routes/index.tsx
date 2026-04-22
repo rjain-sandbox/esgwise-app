@@ -5,13 +5,13 @@ import { tools, type ToolAccent } from "@/lib/tools";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Verdant — ESG Toolkit for investors and individuals" },
+      { title: "ESGwise — ESG Toolkit for investors and individuals" },
       {
         name: "description",
         content:
           "Five sharp tools to understand, measure and improve your ESG impact: Investor DNA, ESGpt, SROI Calculator, Carbon Footprint and Carbon Handprint.",
       },
-      { property: "og:title", content: "Verdant — ESG Toolkit" },
+      { property: "og:title", content: "ESGwise — ESG Toolkit" },
       {
         property: "og:description",
         content: "Investor DNA, ESGpt, SROI, Carbon Footprint and Handprint — all in one place.",
@@ -142,7 +142,7 @@ function Index() {
       <section id="about" className="border-t border-border/60 bg-secondary/40">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-20 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Why Verdant</div>
+            <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Why ESGwise</div>
             <h2 className="mt-3 font-display text-4xl font-semibold leading-tight text-foreground">
               ESG without the
               <br />
@@ -151,7 +151,7 @@ function Index() {
           </div>
           <div className="space-y-6 text-base leading-relaxed text-muted-foreground lg:col-span-7">
             <p>
-              Most ESG products serve compliance teams. Verdant is built for the people writing the cheques —
+              Most ESG products serve compliance teams. ESGwise is built for the people writing the cheques —
               and the people whose lives those cheques affect. Plain language, defensible numbers, no
               dashboards bloated with vanity metrics.
             </p>
@@ -165,7 +165,7 @@ function Index() {
 
       <footer className="border-t border-border/60">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-3 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center">
-          <div>© {new Date().getFullYear()} Verdant ESG Toolkit</div>
+          <div>© {new Date().getFullYear()} ESGwise Toolkit</div>
           <div className="font-display italic">Capital with conscience.</div>
         </div>
       </footer>
