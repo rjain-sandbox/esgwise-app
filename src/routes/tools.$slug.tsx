@@ -1,5 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ToolStub } from "@/components/ToolStub";
+import { SroiCalculator } from "@/components/SroiCalculator";
 import { tools } from "@/lib/tools";
 
 const stubContent: Record<string, { bullets: string[] }> = {
@@ -79,6 +80,11 @@ export const Route = createFileRoute("/tools/$slug")({
 
 function ToolPage() {
   const { tool } = Route.useLoaderData();
+
+  if (tool.slug === "sroi") {
+    return <SroiCalculator />;
+  }
+
   const content = stubContent[tool.slug];
   return (
     <ToolStub
