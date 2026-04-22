@@ -29,10 +29,10 @@ const accentBg: Record<ToolAccent, string> = {
 };
 
 const accentSoft: Record<ToolAccent, string> = {
-  moss: "bg-moss/10 text-moss",
-  ochre: "bg-ochre/15 text-ochre",
-  clay: "bg-clay/15 text-clay",
-  sky: "bg-sky/15 text-sky",
+  moss: "bg-moss/15 text-moss-text",
+  ochre: "bg-ochre/20 text-ochre-text",
+  clay: "bg-clay/20 text-clay-text",
+  sky: "bg-sky/20 text-sky-text",
 };
 
 function Index() {
@@ -121,7 +121,7 @@ function Index() {
                 <h3 className="mt-6 font-display text-3xl font-semibold leading-tight text-foreground">
                   {tool.name}
                 </h3>
-                <p className="mt-1 text-sm font-medium text-primary/70">{tool.tagline}</p>
+                <p className="mt-1 text-sm font-medium text-primary">{tool.tagline}</p>
                 <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
                   {tool.description}
                 </p>
