@@ -39,14 +39,14 @@ function Index() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-
+      <main id="main-content">
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section aria-labelledby="hero-heading" className="relative overflow-hidden">
         <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 sm:pt-24">
           <div className="grid items-end gap-10 lg:grid-cols-12">
             <div className="lg:col-span-8">
               <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                <span className="h-1.5 w-1.5 rounded-full bg-moss" />
+                <span className="h-1.5 w-1.5 rounded-full bg-moss" aria-hidden="true" />
                 A toolkit for thoughtful capital
               </span>
               <h1 className="mt-6 font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[1.02] text-foreground">
