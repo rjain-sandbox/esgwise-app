@@ -29,7 +29,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
+      { title: "ESGwise — ESG Toolkit" },
       { name: "description", content: "ESGwise is an ESG toolkit web application for investors and individuals." },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Lovable App" },
