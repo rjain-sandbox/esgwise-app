@@ -37,7 +37,7 @@ export function CarbonHandprint() {
 
   const allAnswered = handprintQuestions.every((q) => {
     const a = answers[q.id];
-    return a !== null && a !== undefined && a !== "";
+    return a !== null && a !== undefined;
   });
 
   if (showResult) {
