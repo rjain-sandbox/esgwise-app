@@ -4,6 +4,7 @@ import { SroiCalculator } from "@/components/SroiCalculator";
 import { InvestorDna } from "@/components/InvestorDna";
 import { CarbonHandprint } from "@/components/CarbonHandprint";
 import { CarbonFootprint } from "@/components/CarbonFootprint";
+import { Esgpt } from "@/components/Esgpt";
 import { tools } from "@/lib/tools";
 
 const stubContent: Record<string, { bullets: string[] }> = {
@@ -98,6 +99,10 @@ function ToolPage() {
 
   if (tool.slug === "carbon-footprint") {
     return <CarbonFootprint />;
+  }
+
+  if (tool.slug === "esgpt") {
+    return <Esgpt />;
   }
 
   const content = stubContent[tool.slug];
