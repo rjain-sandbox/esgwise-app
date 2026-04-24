@@ -6,48 +6,10 @@ import { CarbonHandprint } from "@/components/CarbonHandprint";
 import { CarbonFootprint } from "@/components/CarbonFootprint";
 import { Esgpt } from "@/components/Esgpt";
 import { tools } from "@/lib/tools";
+import { useI18n, type TranslationKey } from "@/lib/i18n";
 
-const stubContent: Record<string, { bullets: string[] }> = {
-  "investor-dna": {
-    bullets: [
-      "Map your values across environmental, social and governance axes.",
-      "Assess your time horizon, risk appetite and impact tolerance.",
-      "Receive an archetype: Steward, Catalyst, Pragmatist or Pioneer.",
-      "Get curated themes and asset classes that fit your DNA.",
-    ],
-  },
-  esgpt: {
-    bullets: [
-      "Ask about ratings, frameworks (GRI, SASB, TCFD, SFDR) and regulations.",
-      "Get plain-language explanations with cited sources.",
-      "Compare two companies' ESG profiles in seconds.",
-      "Save threads to revisit your research trail.",
-    ],
-  },
-  sroi: {
-    bullets: [
-      "Define inputs, outputs, outcomes and stakeholders step by step.",
-      "Apply financial proxies to non-market outcomes.",
-      "Discount for deadweight, attribution and drop-off.",
-      "Export an SROI ratio with an audit-ready breakdown.",
-    ],
-  },
-  "carbon-footprint": {
-    bullets: [
-      "Capture energy, transport, food and consumption inputs.",
-      "Allocate emissions across scope 1, 2 and 3.",
-      "Benchmark against country and peer-group averages.",
-      "Identify the three highest-leverage reductions you can make.",
-    ],
-  },
-  "carbon-handprint": {
-    bullets: [
-      "Estimate avoided emissions from products, services or investments.",
-      "Apply conservative counterfactual baselines.",
-      "Net handprint against footprint to see your true contribution.",
-      "Generate a one-page summary you can share with stakeholders.",
-    ],
-  },
+const stubBullets: Partial<Record<string, TranslationKey[]>> = {
+  // ESGpt is fully implemented; no stub bullets needed.
 };
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -61,57 +23,46 @@ export const Route = createFileRoute("/tools/$slug")({
     if (!tool) return { meta: [{ title: "Tool not found — ESGwise" }] };
     return {
       meta: [
-        { title: `${tool.name} — ESGwise ESG Toolkit` },
-        { name: "description", content: tool.description },
-        { property: "og:title", content: `${tool.name} — ESGwise` },
-        { property: "og:description", content: tool.description },
+        { title: `ESGwise — ${tool.slug}` },
       ],
     };
   },
-  notFoundComponent: () => (
-    <div className="flex min-h-screen items-center justify-center px-6 text-center">
-      <div>
-        <h1 className="font-display text-4xl font-semibold">Tool not found</h1>
-        <p className="mt-2 text-muted-foreground">That tool doesn't exist (yet).</p>
-        <a href="/" className="mt-6 inline-block rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">
-          Back to dashboard
-        </a>
-      </div>
-    </div>
-  ),
+  notFoundComponent: () => <NotFoundView />,
   component: ToolPage,
 });
 
+function NotFoundView() {
+  const { t } = useI18n();
+  return (
+    <div className="flex min-h-screen items-center justify-center px-6 text-center">
+      <div>
+        <h1 className="font-display text-4xl font-semibold">{t("404.toolTitle")}</h1>
+        <p className="mt-2 text-muted-foreground">{t("404.toolLead")}</p>
+        <a href="/" className="mt-6 inline-block rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">
+          {t("404.home")}
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function ToolPage() {
   const { tool } = Route.useLoaderData();
+  const { t } = useI18n();
 
-  if (tool.slug === "sroi") {
-    return <SroiCalculator />;
-  }
+  if (tool.slug === "sroi") return <SroiCalculator />;
+  if (tool.slug === "investor-dna") return <InvestorDna />;
+  if (tool.slug === "carbon-handprint") return <CarbonHandprint />;
+  if (tool.slug === "carbon-footprint") return <CarbonFootprint />;
+  if (tool.slug === "esgpt") return <Esgpt />;
 
-  if (tool.slug === "investor-dna") {
-    return <InvestorDna />;
-  }
-
-  if (tool.slug === "carbon-handprint") {
-    return <CarbonHandprint />;
-  }
-
-  if (tool.slug === "carbon-footprint") {
-    return <CarbonFootprint />;
-  }
-
-  if (tool.slug === "esgpt") {
-    return <Esgpt />;
-  }
-
-  const content = stubContent[tool.slug];
+  const bullets = stubBullets[tool.slug] ?? [];
   return (
     <ToolStub
-      eyebrow={`Tool ${tool.number}`}
-      title={tool.name}
-      description={tool.description}
-      bullets={content?.bullets ?? []}
+      eyebrow={`${t("stub.toolN")} ${tool.number}`}
+      title={t(tool.nameKey)}
+      description={t(tool.descriptionKey)}
+      bullets={bullets.map((k) => t(k))}
       accent={tool.accent}
     />
   );

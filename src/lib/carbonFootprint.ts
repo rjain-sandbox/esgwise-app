@@ -1,145 +1,72 @@
+import type { TranslationKey } from "./i18n";
+
 export interface FootprintQuestion {
   id: string;
   area: string;
-  prompt: string;
-  lowLabel: string;
-  highLabel: string;
+  promptKey: TranslationKey;
+  lowKey: TranslationKey;
+  highKey: TranslationKey;
 }
 
 export const footprintAreas = [
-  { id: "living", name: "Living", subtitle: "Home & Energy" },
-  { id: "mobility", name: "Mobility", subtitle: "Daily Commute" },
-  { id: "transport", name: "Transportation", subtitle: "Long Distance" },
-  { id: "consumption", name: "Consumption", subtitle: "Food & Stuff" },
+  { id: "living", nameKey: "fp.area.living" as TranslationKey, subtitleKey: "fp.area.living.subtitle" as TranslationKey },
+  { id: "mobility", nameKey: "fp.area.mobility" as TranslationKey, subtitleKey: "fp.area.mobility.subtitle" as TranslationKey },
+  { id: "transport", nameKey: "fp.area.transport" as TranslationKey, subtitleKey: "fp.area.transport.subtitle" as TranslationKey },
+  { id: "consumption", nameKey: "fp.area.consumption" as TranslationKey, subtitleKey: "fp.area.consumption.subtitle" as TranslationKey },
 ] as const;
 
 export const footprintQuestions: FootprintQuestion[] = [
-  {
-    id: "heating",
-    area: "living",
-    prompt: "Home Heating/Cooling: How much do you rely on fossil fuels (gas, oil, or coal) to heat or cool your home?",
-    lowLabel: "100% Renewable/Solar",
-    highLabel: "100% Fossil Fuels",
-  },
-  {
-    id: "efficiency",
-    area: "living",
-    prompt: "Energy Efficiency: How well-insulated is your home, and do you use energy-saving appliances?",
-    lowLabel: "Perfectly Insulated/Smart Home",
-    highLabel: "Drafty/Old Appliances",
-  },
-  {
-    id: "electricity",
-    area: "living",
-    prompt: "Electricity Usage: How often do you leave lights or electronics on when they aren't being used?",
-    lowLabel: "Always Off",
-    highLabel: "Always On",
-  },
-  {
-    id: "commute",
-    area: "mobility",
-    prompt: "Commuting Mode: How do you usually get to work or school?",
-    lowLabel: "Walk/Bike",
-    highLabel: "Single-person Petrol Car",
-  },
-  {
-    id: "ev",
-    area: "mobility",
-    prompt: "Electric Transition: Is your primary vehicle powered by electricity or high-emission fuel?",
-    lowLabel: "EV/E-Bike",
-    highLabel: "Large SUV/Diesel",
-  },
-  {
-    id: "transit",
-    area: "mobility",
-    prompt: "Public Transit Use: How often do you choose buses or trains over a private car?",
-    lowLabel: "Always Public",
-    highLabel: "Never Public",
-  },
-  {
-    id: "flights",
-    area: "transport",
-    prompt: "Air Travel: How many flights (short or long-haul) do you take in a typical year?",
-    lowLabel: "None",
-    highLabel: "Frequent Flyer",
-  },
-  {
-    id: "alttravel",
-    area: "transport",
-    prompt: "Alternative Travel: Do you actively choose trains or carpooling for trips over 300 miles?",
-    lowLabel: "Always",
-    highLabel: "Never",
-  },
-  {
-    id: "freight",
-    area: "transport",
-    prompt: "Freight & Shipping: How often do you order items online that require 'next-day' or air shipping?",
-    lowLabel: "Never",
-    highLabel: "Daily",
-  },
-  {
-    id: "diet",
-    area: "consumption",
-    prompt: "Dietary Impact: How much meat and dairy (especially beef) is in your weekly diet?",
-    lowLabel: "Plant-based",
-    highLabel: "Meat with every meal",
-  },
-  {
-    id: "waste",
-    area: "consumption",
-    prompt: "Waste Generation: How much trash does your household produce that goes to a landfill?",
-    lowLabel: "Zero Waste/Compost",
-    highLabel: "Several bags a week",
-  },
-  {
-    id: "buying",
-    area: "consumption",
-    prompt: "Buying Habits: Do you prefer buying new, cheap 'fast-fashion' items over durable or second-hand goods?",
-    lowLabel: "Only Second-hand",
-    highLabel: "Always New/Fast-fashion",
-  },
+  { id: "heating", area: "living", promptKey: "fp.q.heating.prompt", lowKey: "fp.q.heating.low", highKey: "fp.q.heating.high" },
+  { id: "efficiency", area: "living", promptKey: "fp.q.efficiency.prompt", lowKey: "fp.q.efficiency.low", highKey: "fp.q.efficiency.high" },
+  { id: "electricity", area: "living", promptKey: "fp.q.electricity.prompt", lowKey: "fp.q.electricity.low", highKey: "fp.q.electricity.high" },
+  { id: "commute", area: "mobility", promptKey: "fp.q.commute.prompt", lowKey: "fp.q.commute.low", highKey: "fp.q.commute.high" },
+  { id: "ev", area: "mobility", promptKey: "fp.q.ev.prompt", lowKey: "fp.q.ev.low", highKey: "fp.q.ev.high" },
+  { id: "transit", area: "mobility", promptKey: "fp.q.transit.prompt", lowKey: "fp.q.transit.low", highKey: "fp.q.transit.high" },
+  { id: "flights", area: "transport", promptKey: "fp.q.flights.prompt", lowKey: "fp.q.flights.low", highKey: "fp.q.flights.high" },
+  { id: "alttravel", area: "transport", promptKey: "fp.q.alttravel.prompt", lowKey: "fp.q.alttravel.low", highKey: "fp.q.alttravel.high" },
+  { id: "freight", area: "transport", promptKey: "fp.q.freight.prompt", lowKey: "fp.q.freight.low", highKey: "fp.q.freight.high" },
+  { id: "diet", area: "consumption", promptKey: "fp.q.diet.prompt", lowKey: "fp.q.diet.low", highKey: "fp.q.diet.high" },
+  { id: "waste", area: "consumption", promptKey: "fp.q.waste.prompt", lowKey: "fp.q.waste.low", highKey: "fp.q.waste.high" },
+  { id: "buying", area: "consumption", promptKey: "fp.q.buying.prompt", lowKey: "fp.q.buying.low", highKey: "fp.q.buying.high" },
 ];
 
 export interface FootprintLevel {
   score: number;
-  name: string;
-  meaning: string;
+  nameKey: TranslationKey;
+  meaningKey: TranslationKey;
   accent: "moss" | "sky" | "ochre" | "clay";
 }
 
 export const footprintLevels: FootprintLevel[] = [
-  { score: 1, name: "Earth Guardian", meaning: "Your footprint is as low as modern life allows.", accent: "moss" },
-  { score: 2, name: "Eco-Efficient", meaning: "You have optimized most of your high-impact habits.", accent: "moss" },
-  { score: 3, name: "Mindful Consumer", meaning: "You are below the average global carbon footprint.", accent: "moss" },
-  { score: 4, name: "Carbon Neutral (Target)", meaning: "Your footprint is balanced with natural absorption.", accent: "sky" },
-  { score: 5, name: "Global Average", meaning: "You are on par with the average citizen in a developed nation.", accent: "sky" },
-  { score: 6, name: "Impact Heavy", meaning: "Your lifestyle requires more than one Earth to sustain.", accent: "ochre" },
-  { score: 7, name: "High Emitter", meaning: "Your habits in mobility or diet are significantly above average.", accent: "ochre" },
-  { score: 8, name: "Industrial-Scale Consumer", meaning: "You have high frequent travel and consumption habits.", accent: "clay" },
-  { score: 9, name: "Climate Risk", meaning: "Your footprint is among the top 10% of individual emitters.", accent: "clay" },
-  { score: 10, name: "Carbon Giant", meaning: "Your current lifestyle has a massive environmental cost.", accent: "clay" },
+  { score: 1, nameKey: "fp.lvl.1.name", meaningKey: "fp.lvl.1.meaning", accent: "moss" },
+  { score: 2, nameKey: "fp.lvl.2.name", meaningKey: "fp.lvl.2.meaning", accent: "moss" },
+  { score: 3, nameKey: "fp.lvl.3.name", meaningKey: "fp.lvl.3.meaning", accent: "moss" },
+  { score: 4, nameKey: "fp.lvl.4.name", meaningKey: "fp.lvl.4.meaning", accent: "sky" },
+  { score: 5, nameKey: "fp.lvl.5.name", meaningKey: "fp.lvl.5.meaning", accent: "sky" },
+  { score: 6, nameKey: "fp.lvl.6.name", meaningKey: "fp.lvl.6.meaning", accent: "ochre" },
+  { score: 7, nameKey: "fp.lvl.7.name", meaningKey: "fp.lvl.7.meaning", accent: "ochre" },
+  { score: 8, nameKey: "fp.lvl.8.name", meaningKey: "fp.lvl.8.meaning", accent: "clay" },
+  { score: 9, nameKey: "fp.lvl.9.name", meaningKey: "fp.lvl.9.meaning", accent: "clay" },
+  { score: 10, nameKey: "fp.lvl.10.name", meaningKey: "fp.lvl.10.meaning", accent: "clay" },
 ];
 
 export interface FootprintResult {
-  rawTotal: number; // 12–120
-  normalized: number; // 1–10
+  rawTotal: number;
+  normalized: number;
   level: FootprintLevel;
-  areaScores: Record<string, number>; // average per area, 1–10
+  areaScores: Record<string, number>;
 }
 
 export function calculateFootprint(answers: Record<string, number>): FootprintResult {
   const rawTotal = footprintQuestions.reduce((sum, q) => sum + (answers[q.id] ?? 0), 0);
-  // Map 12 (best) – 120 (worst) → 1 – 10
   const pct = (rawTotal - 12) / (120 - 12);
   const normalized = Math.max(1, Math.min(10, Math.round(1 + pct * 9)));
   const level = footprintLevels.find((l) => l.score === normalized) ?? footprintLevels[4];
-
   const areaScores: Record<string, number> = {};
   for (const area of footprintAreas) {
     const qs = footprintQuestions.filter((q) => q.area === area.id);
     const sum = qs.reduce((s, q) => s + (answers[q.id] ?? 0), 0);
     areaScores[area.id] = Math.round((sum / qs.length) * 10) / 10;
   }
-
   return { rawTotal, normalized, level, areaScores };
 }
