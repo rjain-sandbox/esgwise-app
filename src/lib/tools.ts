@@ -1,64 +1,68 @@
+import type { TranslationKey } from "./i18n";
+
 export type ToolAccent = "moss" | "ochre" | "clay" | "sky";
 
+export type ToolSlug =
+  | "investor-dna"
+  | "esgpt"
+  | "sroi"
+  | "carbon-footprint"
+  | "carbon-handprint";
+
 export interface Tool {
-  slug: "investor-dna" | "esgpt" | "sroi" | "carbon-footprint" | "carbon-handprint";
+  slug: ToolSlug;
   number: string;
-  name: string;
-  tagline: string;
-  description: string;
+  nameKey: TranslationKey;
+  taglineKey: TranslationKey;
+  descriptionKey: TranslationKey;
+  metaKey: TranslationKey;
   accent: ToolAccent;
-  meta: string;
 }
 
 export const tools: Tool[] = [
   {
     slug: "investor-dna",
     number: "01",
-    name: "Investor DNA",
-    tagline: "Discover your ESG investor archetype",
-    description:
-      "A short questionnaire that maps your values, risk appetite and impact priorities into a personalised investor profile.",
+    nameKey: "tool.investor-dna.name",
+    taglineKey: "tool.investor-dna.tagline",
+    descriptionKey: "tool.investor-dna.description",
+    metaKey: "tool.investor-dna.meta",
     accent: "moss",
-    meta: "12 questions · 4 min",
   },
   {
     slug: "esgpt",
     number: "02",
-    name: "ESGpt",
-    tagline: "Conversational ESG intelligence",
-    description:
-      "Ask anything about ratings, frameworks, regulations or specific companies. ESGpt cites sources and explains the why.",
+    nameKey: "tool.esgpt.name",
+    taglineKey: "tool.esgpt.tagline",
+    descriptionKey: "tool.esgpt.description",
+    metaKey: "tool.esgpt.meta",
     accent: "sky",
-    meta: "Chat · Always on",
   },
   {
     slug: "sroi",
     number: "03",
-    name: "SROI Calculator",
-    tagline: "Quantify social return on investment",
-    description:
-      "Walk through inputs, outputs, outcomes and proxies to estimate how much social value each dollar of your investment creates.",
+    nameKey: "tool.sroi.name",
+    taglineKey: "tool.sroi.tagline",
+    descriptionKey: "tool.sroi.description",
+    metaKey: "tool.sroi.meta",
     accent: "ochre",
-    meta: "Guided · 8 min",
   },
   {
     slug: "carbon-footprint",
     number: "04",
-    name: "Carbon Footprint",
-    tagline: "Measure the emissions you cause",
-    description:
-      "Estimate the tonnes of CO₂e produced by an individual, household or portfolio across scope 1, 2 and 3 categories.",
+    nameKey: "tool.carbon-footprint.name",
+    taglineKey: "tool.carbon-footprint.tagline",
+    descriptionKey: "tool.carbon-footprint.description",
+    metaKey: "tool.carbon-footprint.meta",
     accent: "clay",
-    meta: "Calculator · 5 min",
   },
   {
     slug: "carbon-handprint",
     number: "05",
-    name: "Carbon Handprint",
-    tagline: "Measure the emissions you avoid",
-    description:
-      "The positive twin of the footprint — quantify the CO₂e your choices and investments help the world avoid.",
+    nameKey: "tool.carbon-handprint.name",
+    taglineKey: "tool.carbon-handprint.tagline",
+    descriptionKey: "tool.carbon-handprint.description",
+    metaKey: "tool.carbon-handprint.meta",
     accent: "moss",
-    meta: "Calculator · 5 min",
   },
 ];
