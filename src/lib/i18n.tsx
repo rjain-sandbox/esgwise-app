@@ -206,6 +206,11 @@ export const dict = {
   "sroi.capital": { en: "Capital invested", de: "Investiertes Kapital" },
   "sroi.totalReturn": { en: "Total social return", de: "Sozialer Gesamtertrag" },
   "sroi.scale": { en: "Rating scale", de: "Bewertungsskala" },
+  "sroi.methodology.title": { en: "How the score is calculated", de: "So wird der Wert berechnet" },
+  "sroi.methodology.body": {
+    en: "Each of the 10 questions is scored on a 0–100 scale. We average those scores and divide by 20 to land on a 0–5 Impact Score, which is then mapped linearly to an SROI %: 0 → −50%, 1 → −25%, 2 → 0%, 3 → +25%, 4 → +50%, 5 → +75%. Total Social Return = Investment Amount × SROI %. The Investment Amount is currency-agnostic — results are expressed in the same unit you entered.",
+    de: "Jede der 10 Fragen wird auf einer Skala von 0–100 bewertet. Wir bilden den Durchschnitt und teilen durch 20, um einen Wirkungswert von 0–5 zu erhalten, der linear in einen SROI-% übersetzt wird: 0 → −50 %, 1 → −25 %, 2 → 0 %, 3 → +25 %, 4 → +50 %, 5 → +75 %. Sozialer Gesamtertrag = Investitionsbetrag × SROI %. Der Investitionsbetrag ist währungsunabhängig – die Ergebnisse werden in derselben Einheit ausgewiesen, die Sie eingegeben haben.",
+  },
   "sroi.pillar.social": { en: "Social", de: "Sozial" },
   "sroi.pillar.financial": { en: "Financial", de: "Finanziell" },
   "sroi.pillar.planet": { en: "Planet", de: "Planet" },
