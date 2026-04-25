@@ -7,22 +7,23 @@ import {
   pillarLabelKeys,
   pillarWeights,
   formatCurrency,
+  type Question,
   type SroiResult,
 } from "@/lib/sroi";
 import { useI18n } from "@/lib/i18n";
 
 const pillarColor: Record<keyof typeof pillarWeights, string> = {
-  social: "bg-clay",
   financial: "bg-primary",
-  environmental: "bg-moss",
-  innovation: "bg-ochre",
+  social: "bg-clay",
+  planet: "bg-moss",
+  progress: "bg-ochre",
 };
 
 const pillarText: Record<keyof typeof pillarWeights, string> = {
-  social: "text-clay-text",
   financial: "text-primary",
-  environmental: "text-moss-text",
-  innovation: "text-ochre-text",
+  social: "text-clay-text",
+  planet: "text-moss-text",
+  progress: "text-ochre-text",
 };
 
 const tierColor: Record<SroiResult["tier"]["band"], string> = {
@@ -33,15 +34,12 @@ const tierColor: Record<SroiResult["tier"]["band"], string> = {
   transformative: "bg-primary/15 text-primary",
 };
 
+/** Display order of categories. Capital sits in Financial first. */
+const CATEGORY_ORDER: Array<keyof typeof pillarWeights> = ["financial", "social", "planet", "progress"];
+
 function defaults(): Record<string, number> {
   const d: Record<string, number> = {};
-  for (const q of questions) {
-    if (q.id === "capital") d[q.id] = 250_000;
-    else if (q.id === "roi") d[q.id] = 8;
-    else if (q.id === "jobs") d[q.id] = 25;
-    else if (q.id === "wage") d[q.id] = 60;
-    else d[q.id] = 5;
-  }
+  for (const q of questions) d[q.id] = q.defaultValue;
   return d;
 }
 
@@ -61,6 +59,15 @@ export function SroiCalculator() {
     );
   }
 
+  // Build questions grouped by category, preserving declaration order within each group.
+  let counter = 0;
+  const groups = CATEGORY_ORDER.map((pillar) => ({
+    pillar,
+    items: questions
+      .filter((q) => q.pillar === pillar)
+      .map((q) => ({ q, index: ++counter })),
+  }));
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
@@ -78,9 +85,25 @@ export function SroiCalculator() {
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">{t("sroi.lead")}</p>
 
-        <form onSubmit={(e) => { e.preventDefault(); setShowResult(true); }} className="mt-12 space-y-4">
-          {questions.map((q, i) => (
-            <QuestionCard key={q.id} index={i + 1} question={q} value={answers[q.id]} onChange={(v) => update(q.id, v)} />
+        <form onSubmit={(e) => { e.preventDefault(); setShowResult(true); }} className="mt-12 space-y-10">
+          {groups.map((g) => (
+            <section key={g.pillar} aria-labelledby={`section-${g.pillar}`} className="space-y-4">
+              <header className="flex items-center gap-3">
+                <span className={`h-2 w-2 rounded-full ${pillarColor[g.pillar]}`} aria-hidden="true" />
+                <h2 id={`section-${g.pillar}`} className={`font-display text-sm font-semibold uppercase tracking-[0.22em] ${pillarText[g.pillar]}`}>
+                  {t(pillarLabelKeys[g.pillar])}
+                </h2>
+              </header>
+              {g.items.map(({ q, index }) => (
+                <QuestionCard
+                  key={q.id}
+                  index={index}
+                  question={q}
+                  value={answers[q.id]}
+                  onChange={(v) => update(q.id, v)}
+                />
+              ))}
+            </section>
           ))}
 
           <div className="sticky bottom-4 z-10 mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card/95 p-4 backdrop-blur-md shadow-[0_20px_60px_-20px_color-mix(in_oklab,var(--primary)_25%,transparent)]">
@@ -103,19 +126,19 @@ export function SroiCalculator() {
 
 interface QuestionCardProps {
   index: number;
-  question: (typeof questions)[number];
+  question: Question;
   value: number;
   onChange: (v: number) => void;
 }
 
 function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps) {
   const { t } = useI18n();
-  const pillar = q.pillar;
   const inputId = `sroi-${q.id}`;
   const helpId = `sroi-${q.id}-help`;
+  const isCapital = q.id === "capital";
 
   return (
-    <div className="grain rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/30">
+    <div className={`grain rounded-2xl border bg-card p-6 transition-colors ${isCapital ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-4">
           <span className="font-display text-3xl font-semibold text-primary/40" aria-hidden="true">
@@ -126,21 +149,26 @@ function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps
               {t(q.labelKey)}
             </label>
             <p id={helpId} className="mt-1 text-sm text-muted-foreground">{t(q.helperKey)}</p>
+            {isCapital && (
+              <p className="mt-2 text-xs italic text-muted-foreground">{t("sroi.capitalNote")}</p>
+            )}
           </div>
         </div>
-        <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider ${pillarText[pillar]}`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${pillarColor[pillar]}`} aria-hidden="true" />
-          {t(pillarLabelKeys[pillar])}
+        <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider ${pillarText[q.pillar]}`}>
+          <span className={`h-1.5 w-1.5 rounded-full ${pillarColor[q.pillar]}`} aria-hidden="true" />
+          {t(pillarLabelKeys[q.pillar])}
         </span>
       </div>
 
       <div className="mt-5">
-        {q.type === "currency" || q.type === "number" ? (
+        {q.type === "currency" ? (
           <NumberInput question={q} value={value} onChange={onChange} inputId={inputId} helpId={helpId} />
         ) : q.type === "percent" ? (
           <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v}%`} inputId={inputId} helpId={helpId} />
-        ) : (
+        ) : q.type === "slider10" ? (
           <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v} / 10`} inputId={inputId} helpId={helpId} />
+        ) : (
+          <TierInput question={q} value={value} onChange={onChange} inputId={inputId} />
         )}
       </div>
     </div>
@@ -148,7 +176,7 @@ function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps
 }
 
 function NumberInput({ question: q, value, onChange, inputId, helpId }: {
-  question: (typeof questions)[number]; value: number; onChange: (v: number) => void; inputId: string; helpId: string;
+  question: Question; value: number; onChange: (v: number) => void; inputId: string; helpId: string;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -168,7 +196,7 @@ function NumberInput({ question: q, value, onChange, inputId, helpId }: {
 }
 
 function SliderInput({ question: q, value, onChange, format, inputId, helpId }: {
-  question: (typeof questions)[number]; value: number; onChange: (v: number) => void; format: (v: number) => string; inputId: string; helpId: string;
+  question: Question; value: number; onChange: (v: number) => void; format: (v: number) => string; inputId: string; helpId: string;
 }) {
   return (
     <div>
@@ -188,6 +216,37 @@ function SliderInput({ question: q, value, onChange, format, inputId, helpId }: 
         aria-valuetext={format(value)}
         className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
       />
+    </div>
+  );
+}
+
+function TierInput({ question: q, value, onChange, inputId }: {
+  question: Question; value: number; onChange: (v: number) => void; inputId: string;
+}) {
+  const { t } = useI18n();
+  const opts = q.options ?? [];
+  return (
+    <div role="radiogroup" aria-labelledby={inputId} className="grid gap-2 sm:grid-cols-2">
+      {opts.map((opt, i) => {
+        const active = i === value;
+        return (
+          <button
+            type="button"
+            key={i}
+            role="radio"
+            aria-checked={active}
+            onClick={() => onChange(i)}
+            className={`min-h-11 rounded-xl border px-4 py-3 text-left text-sm font-medium transition ${
+              active
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-input bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            }`}
+          >
+            <span className="font-display text-base">{t(opt.labelKey)}</span>
+            <span className="ml-2 text-xs text-muted-foreground">· {opt.score}/100</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -251,7 +310,7 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-border bg-card p-5">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">{t("sroi.sroi")}</div>
-              <div className="mt-1 font-display text-3xl font-semibold text-foreground">{Math.round(result.sroiPercent)}%</div>
+              <div className="mt-1 font-display text-3xl font-semibold text-foreground">{result.sroiPercent.toFixed(0)}%</div>
               <div className="mt-1 text-xs text-muted-foreground">${(result.sroiPercent / 100).toFixed(2)} {t("sroi.perDollar")}</div>
             </div>
             <div className="rounded-2xl border border-border bg-card p-5">
@@ -268,12 +327,12 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
             <ul className="mt-4 space-y-4">
               {(Object.keys(pillarWeights) as Array<keyof typeof pillarWeights>).map((p) => {
                 const score = result.pillarScores[p];
-                const pct = (score / 10) * 100;
+                const pct = score; // 0..100
                 return (
                   <li key={p}>
                     <div className="flex items-baseline justify-between text-sm">
                       <span className={`font-medium ${pillarText[p]}`}>{t(pillarLabelKeys[p])}</span>
-                      <span className="text-muted-foreground">{score.toFixed(1)}/10</span>
+                      <span className="text-muted-foreground">{score.toFixed(0)}/100</span>
                     </div>
                     <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-secondary">
                       <div className={`h-full ${pillarColor[p]} transition-all`} style={{ width: `${pct}%` }} />
@@ -291,7 +350,9 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
             </div>
             <div className="rounded-2xl border border-border bg-card p-5">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">{t("sroi.totalReturn")}</div>
-              <div className="mt-1 font-display text-2xl font-semibold text-primary">{formatCurrency(result.totalReturn)}</div>
+              <div className={`mt-1 font-display text-2xl font-semibold ${result.totalReturn < 0 ? "text-clay-text" : "text-primary"}`}>
+                {formatCurrency(result.totalReturn)}
+              </div>
             </div>
           </div>
 
