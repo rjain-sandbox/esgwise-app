@@ -59,13 +59,14 @@ export function SroiCalculator() {
     );
   }
 
-  // Build questions grouped by category, preserving declaration order within each group.
+  // Build questions grouped by category. Capital is shown unnumbered; the 10 scored
+  // questions are numbered 1–10 starting at "Financial Return".
   let counter = 0;
   const groups = CATEGORY_ORDER.map((pillar) => ({
     pillar,
     items: questions
       .filter((q) => q.pillar === pillar)
-      .map((q) => ({ q, index: ++counter })),
+      .map((q) => ({ q, index: q.id === "capital" ? null : ++counter })),
   }));
 
   return (
