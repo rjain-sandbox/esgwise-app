@@ -59,13 +59,14 @@ export function SroiCalculator() {
     );
   }
 
-  // Build questions grouped by category, preserving declaration order within each group.
+  // Build questions grouped by category. Capital is shown unnumbered; the 10 scored
+  // questions are numbered 1–10 starting at "Financial Return".
   let counter = 0;
   const groups = CATEGORY_ORDER.map((pillar) => ({
     pillar,
     items: questions
       .filter((q) => q.pillar === pillar)
-      .map((q) => ({ q, index: ++counter })),
+      .map((q) => ({ q, index: q.id === "capital" ? null : ++counter })),
   }));
 
   return (
@@ -125,7 +126,7 @@ export function SroiCalculator() {
 }
 
 interface QuestionCardProps {
-  index: number;
+  index: number | null;
   question: Question;
   value: number;
   onChange: (v: number) => void;
@@ -141,9 +142,11 @@ function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps
     <div className={`grain rounded-2xl border bg-card p-6 transition-colors ${isCapital ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-4">
-          <span className="font-display text-3xl font-semibold text-primary/40" aria-hidden="true">
-            {String(index).padStart(2, "0")}
-          </span>
+          {index !== null && (
+            <span className="font-display text-3xl font-semibold text-primary/40" aria-hidden="true">
+              {String(index).padStart(2, "0")}
+            </span>
+          )}
           <div>
             <label htmlFor={inputId} className="font-display text-xl font-semibold leading-tight text-foreground cursor-pointer">
               {t(q.labelKey)}
@@ -243,7 +246,6 @@ function TierInput({ question: q, value, onChange, inputId }: {
             }`}
           >
             <span className="font-display text-base">{t(opt.labelKey)}</span>
-            <span className="ml-2 text-xs text-muted-foreground">· {opt.score}/100</span>
           </button>
         );
       })}
@@ -311,7 +313,7 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
             <div className="rounded-2xl border border-border bg-card p-5">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">{t("sroi.sroi")}</div>
               <div className="mt-1 font-display text-3xl font-semibold text-foreground">{result.sroiPercent.toFixed(0)}%</div>
-              <div className="mt-1 text-xs text-muted-foreground">${(result.sroiPercent / 100).toFixed(2)} {t("sroi.perDollar")}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{(result.sroiPercent / 100).toFixed(2)} {t("sroi.perDollar")}</div>
             </div>
             <div className="rounded-2xl border border-border bg-card p-5">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">{t("sroi.rawTotal")}</div>
@@ -388,6 +390,11 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
           })}
         </div>
       </div>
+
+      <footer className="mt-10 rounded-2xl border border-dashed border-border bg-background/40 p-5">
+        <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{t("sroi.methodology.title")}</div>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t("sroi.methodology.body")}</p>
+      </footer>
     </main>
   );
 }

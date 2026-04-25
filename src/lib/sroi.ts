@@ -43,7 +43,6 @@ export const questions: Question[] = [
     type: "currency",
     min: 0,
     step: 1000,
-    unit: "$",
     defaultValue: 250_000,
     // Capital is the multiplier — does NOT contribute to the impact score.
     score: () => 0,
@@ -256,11 +255,15 @@ function avg(arr: number[]): number {
   return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
 
+/**
+ * Currency-agnostic amount formatter. The user enters their amount in whichever
+ * currency they like — we just return a clean numeric string with K/M/B suffixes.
+ */
 export function formatCurrency(n: number): string {
   const abs = Math.abs(n);
   const sign = n < 0 ? "-" : "";
-  if (abs >= 1_000_000_000) return `${sign}$${(abs / 1_000_000_000).toFixed(2)}B`;
-  if (abs >= 1_000_000) return `${sign}$${(abs / 1_000_000).toFixed(2)}M`;
-  if (abs >= 1_000) return `${sign}$${(abs / 1_000).toFixed(1)}K`;
-  return `${sign}$${Math.round(abs).toLocaleString()}`;
+  if (abs >= 1_000_000_000) return `${sign}${(abs / 1_000_000_000).toFixed(2)}B`;
+  if (abs >= 1_000_000) return `${sign}${(abs / 1_000_000).toFixed(2)}M`;
+  if (abs >= 1_000) return `${sign}${(abs / 1_000).toFixed(1)}K`;
+  return `${sign}${Math.round(abs).toLocaleString()}`;
 }
