@@ -126,7 +126,7 @@ export function SroiCalculator() {
 }
 
 interface QuestionCardProps {
-  index: number;
+  index: number | null;
   question: Question;
   value: number;
   onChange: (v: number) => void;
@@ -142,9 +142,11 @@ function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps
     <div className={`grain rounded-2xl border bg-card p-6 transition-colors ${isCapital ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-4">
-          <span className="font-display text-3xl font-semibold text-primary/40" aria-hidden="true">
-            {String(index).padStart(2, "0")}
-          </span>
+          {index !== null && (
+            <span className="font-display text-3xl font-semibold text-primary/40" aria-hidden="true">
+              {String(index).padStart(2, "0")}
+            </span>
+          )}
           <div>
             <label htmlFor={inputId} className="font-display text-xl font-semibold leading-tight text-foreground cursor-pointer">
               {t(q.labelKey)}
