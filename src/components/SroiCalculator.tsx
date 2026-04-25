@@ -313,7 +313,7 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
             <div className="rounded-2xl border border-border bg-card p-5">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">{t("sroi.sroi")}</div>
               <div className="mt-1 font-display text-3xl font-semibold text-foreground">{result.sroiPercent.toFixed(0)}%</div>
-              <div className="mt-1 text-xs text-muted-foreground">${(result.sroiPercent / 100).toFixed(2)} {t("sroi.perDollar")}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{(result.sroiPercent / 100).toFixed(2)} {t("sroi.perDollar")}</div>
             </div>
             <div className="rounded-2xl border border-border bg-card p-5">
               <div className="text-xs uppercase tracking-wider text-muted-foreground">{t("sroi.rawTotal")}</div>
