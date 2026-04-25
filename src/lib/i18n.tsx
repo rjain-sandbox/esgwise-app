@@ -223,7 +223,7 @@ export const dict = {
   "sroi.tier.loss.desc": { en: "Negative or zero social impact.", de: "Negative oder keine soziale Wirkung." },
   // SROI questions — Financial
   "sroi.q.capital.label": { en: "Investment Amount", de: "Investitionsbetrag" },
-  "sroi.q.capital.helper": { en: "Total dollar amount of the investment (USD).", de: "Gesamtbetrag der Investition (USD)." },
+  "sroi.q.capital.helper": { en: "Total amount of the investment in your local currency.", de: "Gesamtbetrag der Investition in Ihrer Landeswährung." },
   "sroi.q.roi.label": { en: "Financial Return (%)", de: "Finanzielle Rendite (%)" },
   "sroi.q.roi.helper": { en: "What is the expected annual financial ROI of this project? (-50% to +50%)", de: "Erwartete jährliche finanzielle Rendite des Projekts (-50 % bis +50 %)." },
   // Social
