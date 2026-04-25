@@ -43,7 +43,6 @@ export const questions: Question[] = [
     type: "currency",
     min: 0,
     step: 1000,
-    unit: "$",
     defaultValue: 250_000,
     // Capital is the multiplier — does NOT contribute to the impact score.
     score: () => 0,
