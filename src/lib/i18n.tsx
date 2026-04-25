@@ -189,9 +189,11 @@ export const dict = {
   "sroi.titleA": { en: "Social Return", de: "Sozialer Ertrag" },
   "sroi.titleB": { en: "on Investment.", de: "auf Investitionen." },
   "sroi.lead": {
-    en: "Answer 10 questions about your planned investment. We score each on a 0–10 scale, divide the total by 20 to get a 0–5 Social Impact Score, then translate that into an SROI percentage and a Total Social Return in dollars.",
-    de: "Beantworten Sie 10 Fragen zu Ihrer geplanten Investition. Jede wird auf einer Skala von 0–10 bewertet, geteilt durch 20 ergibt einen sozialen Wirkungswert von 0–5, übersetzt in einen SROI-Prozentwert und einen sozialen Gesamtertrag.",
+    en: "Start with the capital you plan to commit, then answer 10 questions across Financial, Social, Planet and Progress. Each is scored 0–100; we average them, divide by 20 to land on a 0–5 Impact Score, then translate that into an SROI % and a Total Social Return.",
+    de: "Beginnen Sie mit dem geplanten Kapitaleinsatz und beantworten Sie 10 Fragen aus Finanzen, Sozialem, Planet und Fortschritt. Jede Antwort wird auf 0–100 bewertet; der Durchschnitt geteilt durch 20 ergibt einen Wirkungswert von 0–5, übersetzt in SROI % und sozialen Gesamtertrag.",
   },
+  "sroi.capitalSection": { en: "Start with your capital", de: "Mit Ihrem Kapital beginnen" },
+  "sroi.capitalNote": { en: "This translates the impact score into a dollar return — the quiz starts with the next question.", de: "Damit wird der Wirkungswert in einen Geldbetrag übersetzt – das eigentliche Quiz beginnt mit der nächsten Frage." },
   "sroi.livePreview": { en: "Live preview", de: "Live-Vorschau" },
   "sroi.calculate": { en: "Calculate SROI →", de: "SROI berechnen →" },
   "sroi.score": { en: "Social Impact Score", de: "Sozialer Wirkungswert" },
