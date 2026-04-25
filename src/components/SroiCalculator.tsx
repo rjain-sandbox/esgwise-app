@@ -246,7 +246,6 @@ function TierInput({ question: q, value, onChange, inputId }: {
             }`}
           >
             <span className="font-display text-base">{t(opt.labelKey)}</span>
-            <span className="ml-2 text-xs text-muted-foreground">· {opt.score}/100</span>
           </button>
         );
       })}
