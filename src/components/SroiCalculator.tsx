@@ -390,6 +390,11 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
           })}
         </div>
       </div>
+
+      <footer className="mt-10 rounded-2xl border border-dashed border-border bg-background/40 p-5">
+        <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{t("sroi.methodology.title")}</div>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t("sroi.methodology.body")}</p>
+      </footer>
     </main>
   );
 }
