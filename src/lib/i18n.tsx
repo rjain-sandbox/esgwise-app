@@ -231,8 +231,8 @@ export const dict = {
   "sroi.q.capital.helper": { en: "Total amount of the investment in your local currency.", de: "Gesamtbetrag der Investition in Ihrer Landeswährung." },
   "sroi.q.roi.label": { en: "Total Capital Returned (%)", de: "Gesamtes zurückgezahltes Kapital (%)" },
   "sroi.q.roi.helper": {
-    en: "How much total capital (principal + profit) do you expect back at the end of the investment period? 0% = philanthropy · 100% = break-even · above 100% = profit.",
-    de: "Wie viel Kapital (Einsatz + Gewinn) erwarten Sie am Ende der Investitionsdauer zurück? 0 % = Philanthropie · 100 % = Break-even · über 100 % = Gewinn.",
+    en: "How much total capital (principal + profit) do you expect back at the end of the investment period? 0%: Pure Philanthropy / Full Grant · 100%: Capital Preservation (Break-even) · >100%: Positive Financial Return (Profit).",
+    de: "Wie viel Kapital (Einsatz + Gewinn) erwarten Sie am Ende der Investitionsdauer zurück? 0 %: Reine Philanthropie / Vollzuschuss · 100 %: Kapitalerhalt (Break-even) · >100 %: Positive Finanzrendite (Gewinn).",
   },
  "sroi.q.roi.seg.0": { en: "Total loss", de: "Totalverlust" },
  "sroi.q.roi.seg.50": { en: "Recoverable grant", de: "Teil­rück­zahlung" },
