@@ -53,13 +53,13 @@ export const questions: Question[] = [
     labelKey: "sroi.q.roi.label",
     helperKey: "sroi.q.roi.helper",
     type: "percent",
-    min: -50,
-    max: 50,
+    min: 0,
+    max: 200,
     step: 1,
     unit: "%",
-    defaultValue: 8,
-    // Slider -50..+50 → score = value + 50  → 0..100
-    score: (v) => clamp(v + 50),
+    defaultValue: 100,
+    // 0% (total loss) → 0 score; 200%+ (home run) → 100 score. Linear.
+    score: (v) => clamp((v / 200) * 100),
   },
   // SOCIAL
   {

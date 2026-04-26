@@ -229,8 +229,11 @@ export const dict = {
   // SROI questions — Financial
   "sroi.q.capital.label": { en: "Investment Amount", de: "Investitionsbetrag" },
   "sroi.q.capital.helper": { en: "Total amount of the investment in your local currency.", de: "Gesamtbetrag der Investition in Ihrer Landeswährung." },
-  "sroi.q.roi.label": { en: "Financial Return (%)", de: "Finanzielle Rendite (%)" },
-  "sroi.q.roi.helper": { en: "What is the expected annual financial ROI of this project? (-50% to +50%)", de: "Erwartete jährliche finanzielle Rendite des Projekts (-50 % bis +50 %)." },
+ "sroi.q.roi.label": { en: "Total Return on Capital (%)", de: "Gesamtrendite auf das Kapital (%)" },
+ "sroi.q.roi.helper": {
+   en: "Total capital returned, where 100% = break-even (you got back exactly what you put in) and anything above 100% is profit. 0% = pure philanthropy / total loss · 1–99% = recoverable grant · 100% = capital preservation · 105–120% = concessional / green bonds · 140–180% = market-rate equity · 200%+ = impact venture home run.",
+   de: "Gesamtkapital-Rückfluss, wobei 100 % Break-even bedeutet (Sie erhalten genau das eingesetzte Kapital zurück) und alles über 100 % Gewinn ist. 0 % = reine Philanthropie / Totalverlust · 1–99 % = teilweise Kapitalrückzahlung · 100 % = Kapitalerhalt · 105–120 % = vergünstigte Konditionen / Green Bonds · 140–180 % = marktübliche Eigenkapitalrendite · 200 %+ = Impact-Venture-Volltreffer.",
+ },
   // Social
   "sroi.q.jobs.label": { en: "New Local Jobs", de: "Neue lokale Arbeitsplätze" },
   "sroi.q.jobs.helper": { en: "How many FTE roles will be created in the local community?", de: "Wie viele Vollzeitstellen entstehen in der lokalen Gemeinschaft?" },
