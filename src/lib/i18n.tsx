@@ -229,11 +229,11 @@ export const dict = {
   // SROI questions — Financial
   "sroi.q.capital.label": { en: "Investment Amount", de: "Investitionsbetrag" },
   "sroi.q.capital.helper": { en: "Total amount of the investment in your local currency.", de: "Gesamtbetrag der Investition in Ihrer Landeswährung." },
- "sroi.q.roi.label": { en: "Total Return on Capital (%)", de: "Gesamtrendite auf das Kapital (%)" },
- "sroi.q.roi.helper": {
-   en: "100% = break-even; above 100% is profit.",
-   de: "100 % = Break-even; über 100 % ist Gewinn.",
- },
+  "sroi.q.roi.label": { en: "Total Capital Returned (%)", de: "Gesamtes zurückgezahltes Kapital (%)" },
+  "sroi.q.roi.helper": {
+    en: "How much total capital (principal + profit) do you expect back at the end of the investment period? 0% = philanthropy · 100% = break-even · above 100% = profit.",
+    de: "Wie viel Kapital (Einsatz + Gewinn) erwarten Sie am Ende der Investitionsdauer zurück? 0 % = Philanthropie · 100 % = Break-even · über 100 % = Gewinn.",
+  },
  "sroi.q.roi.seg.0": { en: "Total loss", de: "Totalverlust" },
  "sroi.q.roi.seg.50": { en: "Recoverable grant", de: "Teil­rück­zahlung" },
  "sroi.q.roi.seg.100": { en: "Break-even", de: "Break-even" },
