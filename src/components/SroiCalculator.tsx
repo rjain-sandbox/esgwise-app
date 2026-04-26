@@ -351,14 +351,15 @@ function ResultsView({ result, onBack, onReset }: { result: SroiResult; onBack: 
                 </linearGradient>
               </defs>
               <path d="M 15 100 A 85 85 0 0 1 185 100" fill="none" stroke="url(#arc)" strokeWidth="14" strokeLinecap="round" />
-              {[
-                { x: 15, y: 108, label: "0" },
-                { x: 60, y: 30, label: "2" },
-                { x: 140, y: 30, label: "4" },
-                { x: 185, y: 108, label: "5" },
-              ].map((tk) => (
-                <text key={tk.label} x={tk.x} y={tk.y} textAnchor="middle" className="fill-foreground" fontSize="9">{tk.label}</text>
-              ))}
+              {[0, 1, 2, 3, 4, 5].map((n) => {
+                const a = (-90 + (n / 5) * 180) * (Math.PI / 180);
+                const r = 98;
+                const x = 100 + r * Math.sin(a);
+                const y = 100 - r * Math.cos(a) + 3;
+                return (
+                  <text key={n} x={x} y={y} textAnchor="middle" className="fill-foreground" fontSize="9">{n}</text>
+                );
+              })}
               <g transform={`translate(100 100) rotate(${angle})`}>
                 <line x1="0" y1="0" x2="0" y2="-78" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-foreground" />
                 <circle r="6" className="fill-primary" />
