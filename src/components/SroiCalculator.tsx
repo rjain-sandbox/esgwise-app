@@ -167,7 +167,26 @@ function QuestionCard({ index, question: q, value, onChange }: QuestionCardProps
         {q.type === "currency" ? (
           <NumberInput question={q} value={value} onChange={onChange} inputId={inputId} helpId={helpId} />
         ) : q.type === "percent" ? (
-          <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v}%`} inputId={inputId} helpId={helpId} />
+          <SliderInput
+            question={q}
+            value={value}
+            onChange={onChange}
+            format={(v) => `${v}%`}
+            inputId={inputId}
+            helpId={helpId}
+            segments={
+              q.id === "roi"
+                ? [
+                    { at: 0, key: "sroi.q.roi.seg.0" },
+                    { at: 50, key: "sroi.q.roi.seg.50" },
+                    { at: 100, key: "sroi.q.roi.seg.100" },
+                    { at: 120, key: "sroi.q.roi.seg.120" },
+                    { at: 160, key: "sroi.q.roi.seg.160" },
+                    { at: 200, key: "sroi.q.roi.seg.200" },
+                  ]
+                : undefined
+            }
+          />
         ) : q.type === "slider10" ? (
           <SliderInput question={q} value={value} onChange={onChange} format={(v) => `${v} / 10`} inputId={inputId} helpId={helpId} />
         ) : (
@@ -198,14 +217,27 @@ function NumberInput({ question: q, value, onChange, inputId, helpId }: {
   );
 }
 
-function SliderInput({ question: q, value, onChange, format, inputId, helpId }: {
+function SliderInput({ question: q, value, onChange, format, inputId, helpId, segments }: {
   question: Question; value: number; onChange: (v: number) => void; format: (v: number) => string; inputId: string; helpId: string;
+  segments?: Array<{ at: number; key: import("@/lib/i18n").TranslationKey }>;
 }) {
+  const { t } = useI18n();
+  const min = q.min ?? 0;
+  const max = q.max ?? 100;
+  const range = Math.max(max - min, 1);
+  // Find the active segment (largest segment.at <= value)
+  const activeSegIdx = segments
+    ? segments.reduce((acc, s, i) => (value >= s.at ? i : acc), 0)
+    : -1;
   return (
     <div>
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between gap-3">
         <span className="font-display text-3xl font-semibold text-foreground" aria-hidden="true">{format(value)}</span>
-        <span className="text-xs text-muted-foreground" aria-hidden="true">{q.min} — {q.max}</span>
+        {segments ? (
+          <span className="text-xs font-medium text-primary" aria-hidden="true">{t(segments[activeSegIdx].key)}</span>
+        ) : (
+          <span className="text-xs text-muted-foreground" aria-hidden="true">{q.min} — {q.max}</span>
+        )}
       </div>
       <input
         id={inputId}
@@ -216,9 +248,36 @@ function SliderInput({ question: q, value, onChange, format, inputId, helpId }: 
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         aria-describedby={helpId}
-        aria-valuetext={format(value)}
+        aria-valuetext={segments ? `${format(value)} — ${t(segments[activeSegIdx].key)}` : format(value)}
         className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary"
       />
+      {segments && (
+        <div className="relative mt-2 h-8" aria-hidden="true">
+          {segments.map((s, i) => {
+            const pct = ((s.at - min) / range) * 100;
+            const align =
+              pct <= 4 ? "items-start text-left" : pct >= 96 ? "items-end text-right" : "items-center text-center";
+            const translate =
+              pct <= 4 ? "translateX(0)" : pct >= 96 ? "translateX(-100%)" : "translateX(-50%)";
+            return (
+              <div
+                key={i}
+                className={`absolute top-0 flex flex-col ${align}`}
+                style={{ left: `${pct}%`, transform: translate, maxWidth: "5.5rem" }}
+              >
+                <span className="h-1.5 w-px bg-border" />
+                <span
+                  className={`mt-1 text-[10px] leading-tight ${
+                    i === activeSegIdx ? "font-semibold text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {t(s.key)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
